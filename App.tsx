@@ -39,17 +39,19 @@ export default function App() {
           headerTitleAlign: 'center'
         }}>
         
-          <Tab.Screen
-            name='Cardapio'
-            component={MenuScreen}
-            options={{headerTitle: 'CARDÁPIO'}}
-          />
-
+         
           <Tab.Screen
             name='Mesas'
             component={TableScreen}
             options={{headerTitle: 'MESAS'}}
           />
+
+           <Tab.Screen
+            name='Cardapio'
+            component={MenuScreen}
+            options={{headerTitle: 'CARDÁPIO'}}
+          />
+
 
           <Tab.Screen
             name='Carrinho'

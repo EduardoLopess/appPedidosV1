@@ -23,8 +23,23 @@ export default StyleSheet.create({
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-     flex: 1
+    flex: 1,
+    color: 'white'
   },
+
+  active: {
+    backgroundColor: '#316FD8',
+     width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1
+  },
+
+  txtAtive: {
+    color: '#D1D1D1'
+  },
+
+  
 
   line: {
     width: 1,

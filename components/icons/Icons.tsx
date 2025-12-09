@@ -1,11 +1,11 @@
 import Svg, { G, Path } from "react-native-svg";
 
-export const IconMenu = () => {
+export const IconMenu = ({color = "#656665"}) => {
   return (
     <Svg width={35} height={35} viewBox="0 0 512 512">
       <G
         transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
-        fill="#656665"
+        fill={color}
         stroke="none"
       >
         <Path
@@ -61,12 +61,12 @@ c40 40 36 93 -10 128 -23 18 -2799 18 -2822 0z"
   );
 };
 
-export const IconTable = () => {
+export const IconTable = ({color = "#656665"}) => {
   return (
     <Svg width={35} height={35} viewBox="0 0 512 512">
     <G
       transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
-      fill="#656665"
+      fill={color}
       stroke="none"
     >
       <Path
@@ -183,12 +183,12 @@ export const IconTable = () => {
   )
 };
 
-export const IconCart = () => {
+export const IconCart = ({color = "#656665"}) => {
   return (
     <Svg width={35} height={35} viewBox="0 0 512 512">
       <G
         transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
-        fill="#656665"
+        fill={color}
         stroke="none"
       >
         <Path
