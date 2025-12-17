@@ -21,4 +21,10 @@ export default StyleSheet.create({
     letterSpacing: 3,
     
   },
+
+
+  containerModal: {
+    flex: 1,
+    flexDirection: 'column'
+  }
 });

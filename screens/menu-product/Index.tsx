@@ -1,29 +1,17 @@
-import { Text, View } from "react-native"
-import style from './style'
-import { ProductCategory } from "../../components/product-category-card/Index"
-
-const categoryData = [
-    {id: 1, category: 'Cerveja'},
-    {id: 2, category: 'Refrigerante'},
-    {id: 3, category: 'Sem Alccol'},
-]
+import { View } from "react-native";
+import style from "./style";
+import { ProductCategory } from "../../components/product-category-card/Index";
+import { useProduct } from "./ViewModel";
 
 export const MenuScreen = () => {
 
-    
+  const category = useProduct();
 
-
-    return (
-        <View style={style.container}>
-
-            {categoryData.map((item) => {
-                return (
-                    <ProductCategory key={item.id} category={item.category}/>
-                )
-
-            })}
-
-            
-        </View>
-    )
-}
+  return (
+    <View style={style.container}>
+      {category.map((item) => (
+        <ProductCategory key={item} category={item} />
+      ))}
+    </View>
+  );
+};
