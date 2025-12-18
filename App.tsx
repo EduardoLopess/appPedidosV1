@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { AppState, Text, View } from "react-native";
 import * as NavigationBar from "expo-navigation-bar";
 import { NavigationContainer } from "@react-navigation/native";
-import { BottonNavigation } from "./navigation/Index";
+import { BottonNavigation } from "./src/navigation/Index";
 import { MenuScreen } from "./screens/menu-product/Index";
 import { TableScreen } from "./screens/table/Index";
 import { CartScreen } from "./screens/cart/Index";

@@ -8,9 +8,9 @@ export const ModalProductsContent = () => {
 
 
   return (
-    <View>
-
-    </View>
+    <Modal>
+      
+    </Modal>
    
   );
 };

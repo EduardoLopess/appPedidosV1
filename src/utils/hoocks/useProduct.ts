@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ProductData } from "../../data/ProductDataMock";
+import { ProductData } from "../../../data/ProductDataMock";
 
 interface Product {
   name: string;
@@ -13,6 +13,7 @@ const productData: Product[] = ProductData;
 
 export const useProduct = () => {
   const [category, setCategory] = useState<string[]>([]);
+  const [product, setProduct] = useState<Product[]>([])
 
   useEffect(() => {
     const uniqueCategories = Array.from(
@@ -22,5 +23,13 @@ export const useProduct = () => {
     setCategory(uniqueCategories);
   }, []);
 
-  return category;
+
+  const getProduct = (cat: string) => {
+    const product = productData.filter(item => item.category === cat)
+    setProduct(product)
+
+  }
+
+
+  return {getProduct, category, product}
 };

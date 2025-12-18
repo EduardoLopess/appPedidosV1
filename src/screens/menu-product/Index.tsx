@@ -1,11 +1,11 @@
 import { View } from "react-native";
 import style from "./style";
 import { ProductCategory } from "../../components/product-category-card/Index";
-import { useProduct } from "./ViewModel";
+import { useProduct } from "../../utils/hoocks/useProduct";
 
 export const MenuScreen = () => {
 
-  const category = useProduct();
+  const {category} = useProduct()
 
   return (
     <View style={style.container}>

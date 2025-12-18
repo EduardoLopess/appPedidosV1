@@ -2,7 +2,7 @@ import { Text, TouchableOpacity, View } from "react-native";
 import { IconCart, IconMenu, IconTable } from "../components/icons/Icons";
 import style from "./style";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
-import { RootTabParamList } from "../App";
+import { RootTabParamList } from "../../App";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 
