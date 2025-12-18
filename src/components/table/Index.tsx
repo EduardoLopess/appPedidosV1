@@ -1,6 +1,6 @@
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import style from "./style";
-import mesaImg from "../../assets/mesaCard.png";
+import mesaImg from "../../../assets/mesaCard.png";
 
 type TableProps = {
   id: number;

@@ -9,73 +9,40 @@ import {
 import style from "./style";
 import { Table } from "../../components/table/Index";
 import { useState } from "react";
+import { useFilter } from "./Filter";
 
 export const TableScreen = () => {
-  const table = [
-    { id: 1, tableNumber: 1, statusTable: false },
-    { id: 2, tableNumber: 2, statusTable: false },
-    { id: 3, tableNumber: 3, statusTable: true },
-    { id: 4, tableNumber: 4, statusTable: false },
-    { id: 5, tableNumber: 5, statusTable: true },
-    { id: 6, tableNumber: 6, statusTable: false },
-  ];
 
-  const [tableFilter, setTableFilter] = useState(table);
-  const [searchTable, setSearchTable] = useState<string>("");
-
-  const orderTable = (status: boolean, value?: string) => {
-
-     if (!value) {
-      setTableFilter(table);
-      return;
-    }
-
-
-    const tableFilterArray = table.filter(
-      (item) => item.statusTable === status
-    );
-    setTableFilter(tableFilterArray);
-  };
-
-  const searchTableBtn = (value: string) => {
-    if (!value) {
-      setTableFilter(table);
-      return;
-    }
-
-    const tableFilterArray = table.filter((item) =>
-      item.tableNumber.toString().includes(value)
-    );
-    setTableFilter(tableFilterArray);
-  };
-
+  const {searchTable, tableOrder, tableFilter, setSearch, search} = useFilter()
+ 
   return (
     <View style={style.container}>
       <View style={style.containerFilter}>
         <View style={style.containerSearch}>
           <TouchableOpacity style={style.btnSearch} onPress={Keyboard.dismiss}>
             <TextInput
-              placeholder="Buscar..."
               keyboardType="numeric"
-              value={searchTable}
-              onChangeText={(text) => {
-                setSearchTable(text);
-                searchTableBtn(text)
+              placeholder='Buscar...'
+              value={search}
+              onChangeText={(search) => {
+                searchTable(search)
+                setSearch(search)
               }}
             />
+           
           </TouchableOpacity>
         </View>
 
         <View style={style.containerStatus}>
           <TouchableOpacity
             style={[style.btnStatus, { backgroundColor: "#32CD32" }]}
-            onPress={() => orderTable(false)}
+            onPress={() => tableOrder(false)}
           >
             <Text style={style.txtBtn}>LIVRES</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[style.btnStatus, { backgroundColor: "#E90000" }]}
-            onPress={() => orderTable(true)}
+            onPress={() => tableOrder(true)}
           >
             <Text style={style.txtBtn}>OCUPADA</Text>
           </TouchableOpacity>

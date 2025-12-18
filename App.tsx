@@ -3,10 +3,11 @@ import { AppState, Text, View } from "react-native";
 import * as NavigationBar from "expo-navigation-bar";
 import { NavigationContainer } from "@react-navigation/native";
 import { BottonNavigation } from "./src/navigation/Index";
-import { MenuScreen } from "./screens/menu-product/Index";
-import { TableScreen } from "./screens/table/Index";
-import { CartScreen } from "./screens/cart/Index";
+
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { TableScreen } from "./src/screens/table/Index";
+import { MenuScreen } from "./src/screens/menu-product/Index";
+import { CartScreen } from "./src/screens/cart/Index";
 
 
 export type RootTabParamList = {
