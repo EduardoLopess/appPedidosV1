@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { ProductData } from "../../../data/ProductDataMock";
 
 interface Product {
+  id: number,
   name: string;
   price: number;
   category: string;

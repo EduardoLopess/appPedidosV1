@@ -13,6 +13,8 @@ export const MenuScreen = () => {
       {category.map((item) => (
         <ProductCategory key={item} category={item} />
       ))}
+
+      
     </View>
   );
 };

@@ -11,14 +11,22 @@ type ProductCategoryProps = {
 
 export const ProductCategory = ({ category }: ProductCategoryProps) => {
   const {getProduct, product } = useProduct()
+  const { isVisible, openModal, closeModal } = useModal()
+  
+  const handleClick = () => {
+    getProduct(category),
+    openModal()
+  }
 
   return (
-    <TouchableOpacity style={style.container} onPress={() => {
-      getProduct(category)
-    }}>
+    <TouchableOpacity style={style.container} onPress={handleClick}>
       <ModalProductsContent
         product={product}
+        isVisible={isVisible}
+        closeModal={closeModal}
+        category={category}
       />
+      <Text style={style.txt}>{category}</Text>
     </TouchableOpacity>
   );
 };

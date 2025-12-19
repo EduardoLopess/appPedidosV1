@@ -1,5 +1,6 @@
 export const ProductData = [
   {
+    id: 1,
     name: "Bruschetta de Tomate e Manjericão",
     price: 24.90,
     category: "Entradas",
@@ -7,6 +8,7 @@ export const ProductData = [
     available: true,
   },
   {
+    id: 2,
     name: "Dadinhos de Tapioca",
     price: 28.50,
     category: "Entradas",
@@ -14,6 +16,7 @@ export const ProductData = [
     available: true,
   },
   {
+    id: 3,
     name: "Carpaccio de Carne",
     price: 45.00,
     category: "Entradas",
@@ -21,13 +24,15 @@ export const ProductData = [
     available: false,
   },
   {
+    id: 4,
     name: "Filé Mignon ao Molho Madeira",
     price: 89.90,
-    category: "Pratos Principais",
-    type: "Comida",
+    category: "teste",
+    type: "Batata",
     available: true,
   },
   {
+    id: 5,
     name: "Salmão Grelhado com Legumes",
     price: 75.00,
     category: "Pratos Principais",
@@ -35,6 +40,7 @@ export const ProductData = [
     available: true,
   },
   {
+    id: 6,
     name: "Risoto de Camarão",
     price: 82.00,
     category: "Pratos Principais",
@@ -42,6 +48,7 @@ export const ProductData = [
     available: true,
   },
   {
+    id: 7,
     name: "Suco Natural de Laranja (500ml)",
     price: 12.00,
     category: "Bebidas",
@@ -49,6 +56,7 @@ export const ProductData = [
     available: true,
   },
   {
+    id: 8,
     name: "Cerveja Artesanal IPA",
     price: 22.00,
     category: "Bebidas",
@@ -56,6 +64,7 @@ export const ProductData = [
     available: true,
   },
   {
+    id: 9,
     name: "Refrigerante Cola",
     price: 8.00,
     category: "Bebidas",
@@ -63,6 +72,7 @@ export const ProductData = [
     available: true,
   },
   {
+    id: 10,
     name: "Petit Gâteau com Sorvete",
     price: 26.00,
     category: "Sobremesas",
@@ -70,6 +80,7 @@ export const ProductData = [
     available: true,
   },
   {
+    id: 11,
     name: "Cheesecake de Frutas Vermelhas",
     price: 24.50,
     category: "Sobremesas",
@@ -77,6 +88,7 @@ export const ProductData = [
     available: true,
   },
   {
+    id: 12,
     name: "Mousse de Chocolate",
     price: 18.00,
     category: "Sobremesas",
@@ -84,6 +96,7 @@ export const ProductData = [
     available: false,
   },
   {
+    id: 13,
     name: "Moqueca de Banana da Terra",
     price: 55.00,
     category: "Vegano",
@@ -91,6 +104,7 @@ export const ProductData = [
     available: true,
   },
   {
+    id: 14,
     name: "Hambúrguer de Grão de Bico",
     price: 38.00,
     category: "Vegano",
@@ -98,6 +112,7 @@ export const ProductData = [
     available: true,
   },
   {
+    id: 15,
     name: "Salada de Quinoa com Tofu",
     price: 32.00,
     category: "Vegano",
