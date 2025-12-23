@@ -10,7 +10,7 @@ type ProductCategoryProps = {
 };
 
 export const ProductCategory = ({ category }: ProductCategoryProps) => {
-  const {getProduct, product } = useProduct()
+  const {getProduct, product, typeSectionList } = useProduct()
   const { isVisible, openModal, closeModal } = useModal()
   
   const handleClick = () => {
@@ -25,6 +25,7 @@ export const ProductCategory = ({ category }: ProductCategoryProps) => {
         isVisible={isVisible}
         closeModal={closeModal}
         category={category}
+        sections={typeSectionList}
       />
       <Text style={style.txt}>{category}</Text>
     </TouchableOpacity>

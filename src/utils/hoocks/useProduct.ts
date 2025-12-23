@@ -10,11 +10,20 @@ interface Product {
   available: boolean;
 }
 
+type Section = {
+  title: string,
+  data: Product[]
+
+}
+
+
+
 const productData: Product[] = ProductData;
 
 export const useProduct = () => {
   const [category, setCategory] = useState<string[]>([]);
   const [product, setProduct] = useState<Product[]>([])
+  const [typeSectionList, setTypeSectionList] = useState<Section[]>([])
 
   useEffect(() => {
     const uniqueCategories = Array.from(
@@ -26,11 +35,24 @@ export const useProduct = () => {
 
 
   const getProduct = (cat: string) => {
+
     const product = productData.filter(item => item.category === cat)
+
+    const types = Array.from(
+      new Set(product.map(item => item.type))
+    )
+
+    const sections = types.map(type => ({
+      title: type,
+      data: product.filter(item => item.type === type)
+    }))
+
+    setTypeSectionList(sections)
     setProduct(product)
 
   }
 
 
-  return {getProduct, category, product}
+
+  return {typeSectionList, getProduct, category, product}
 };

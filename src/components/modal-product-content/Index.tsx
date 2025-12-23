@@ -1,8 +1,7 @@
-import { Modal, View, Text } from "react-native";
+import { Modal, View, Text, SectionList } from "react-native";
 import style from "./style";
-
-import { useModal } from "../../utils/hoocks/useModal";
 import { TouchableOpacity } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 interface Product {
   id: number,
@@ -18,9 +17,18 @@ interface ModalProps {
   isVisible: boolean;
   closeModal: () => void;
   category: string;
+  sections: Section[]
 }
 
-export const ModalProductsContent = ({  product,  isVisible, closeModal, category}: ModalProps) => {
+interface Section {
+  title: string,
+  data: Product[]
+}
+
+
+
+
+export const ModalProductsContent = ({ product, isVisible, closeModal, category, sections }: ModalProps) => {
   return (
     <Modal
       visible={isVisible}
@@ -33,24 +41,44 @@ export const ModalProductsContent = ({  product,  isVisible, closeModal, categor
       </View>
 
       <View style={style.containerContent}>
-        {product.map((item) => (
 
-          <View key={item.id} style={style.containerProp}>
-            <View>
-              <Text>{item.name}</Text>
+        <SectionList
+          sections={sections}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
+            <View style={style.containerProp}>
+              <View style={style.containerName}>
+                <Text style={style.txtName}>{item.name}</Text>
+              </View>
+              <View style={style.containerPrice}>
+                <Text style={style.txtPrice}>R$: {item.price},00</Text>
+              </View>
+              <View style={style.containerBtnAdd}>
+                <TouchableOpacity style={style.btnAdd}>
+                  <Ionicons name="add-outline" size={25} />
+                </TouchableOpacity>
+
+              </View>
             </View>
-            <View>
-              <Text>{item.price}</Text>
+
+          )}
+          renderSectionHeader={({ section }) => (
+            <View style={{width: '100%', alignItems: 'center'}}>
+              <View style={style.containerSection}>
+                <Text style={style.txtTitleSection}>{section.title}</Text>
+              </View>
+
             </View>
-            <View>
-              
-            </View>
-          </View>
 
 
-     
-      
-      ))}
+
+
+
+          )}
+
+
+        />
+
       </View>
       <View style={style.containerBtn}>
         <TouchableOpacity style={style.btn} onPress={closeModal}>
