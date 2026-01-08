@@ -1,20 +1,19 @@
 import {
+  FlatList,
   Keyboard,
   Text,
   TextInput,
-  TouchableHighlight,
   TouchableOpacity,
   View,
 } from "react-native";
 import style from "./style";
 import { Table } from "../../components/table/Index";
-import { useState } from "react";
 import { useFilter } from "./Filter";
 
 export const TableScreen = () => {
+  const { searchTable, tableOrder, tableFilter, setSearch, search } =
+    useFilter();
 
-  const {searchTable, tableOrder, tableFilter, setSearch, search} = useFilter()
- 
   return (
     <View style={style.container}>
       <View style={style.containerFilter}>
@@ -22,27 +21,26 @@ export const TableScreen = () => {
           <TouchableOpacity style={style.btnSearch} onPress={Keyboard.dismiss}>
             <TextInput
               keyboardType="numeric"
-              placeholder='Buscar...'
+              placeholder="Buscar..."
               value={search}
               onChangeText={(search) => {
-                searchTable(search)
-                setSearch(search)
+                searchTable(search);
+                setSearch(search);
               }}
             />
-           
           </TouchableOpacity>
         </View>
 
         <View style={style.containerStatus}>
           <TouchableOpacity
             style={[style.btnStatus, { backgroundColor: "#32CD32" }]}
-            onPress={() => tableOrder(false)}
+            onPress={() => tableOrder('LIVRE')}
           >
             <Text style={style.txtBtn}>LIVRES</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[style.btnStatus, { backgroundColor: "#E90000" }]}
-            onPress={() => tableOrder(true)}
+            onPress={() => tableOrder('OCUPADA')}
           >
             <Text style={style.txtBtn}>OCUPADA</Text>
           </TouchableOpacity>
@@ -50,14 +48,22 @@ export const TableScreen = () => {
       </View>
 
       <View style={style.containerTable}>
-        {tableFilter.map((item) => (
-          <Table
-            key={item.id}
-            id={item.id}
-            tableNumber={item.tableNumber}
-            statusTable={item.statusTable}
-          />
-        ))}
+        <FlatList
+          numColumns={3}
+          showsVerticalScrollIndicator={false}
+          columnWrapperStyle={{
+            justifyContent: "center",
+          }}
+          data={tableFilter}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
+            <Table
+              id={item.id}
+              tableNumber={item.tableNumber}
+              statusTable={item.statusTable}
+            />
+          )}
+        />
       </View>
     </View>
   );

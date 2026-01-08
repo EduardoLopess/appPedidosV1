@@ -39,11 +39,11 @@ export default StyleSheet.create({
   containerSection: {
     width: 200,
     height: 50,
-    backgroundColor: '#1067F9',
+    backgroundColor: '#356ac7ff',
     borderRadius: 5,
     marginTop: 10,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
 
   },
 

@@ -10,6 +10,7 @@ export default StyleSheet.create({
   },
 
   containerTable: {
+    paddingBottom: 50,
     paddingTop: 10,
     width: '100%',
     flexDirection: "row",

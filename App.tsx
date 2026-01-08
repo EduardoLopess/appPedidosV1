@@ -8,15 +8,16 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { TableScreen } from "./src/screens/table/Index";
 import { MenuScreen } from "./src/screens/menu-product/Index";
 import { CartScreen } from "./src/screens/cart/Index";
-
+import { OrderProvider } from "./src/context/orderFlow";
+import { TableIdentificationDialog } from "./src/components/dialog/Index";
 
 export type RootTabParamList = {
-  Cardapio: undefined,
-  Mesas: undefined,
-  Carrinho: undefined
-}
+  Cardapio: undefined;
+  Mesas: undefined;
+  Carrinho: undefined;
+};
 
-const Tab = createBottomTabNavigator()
+const Tab = createBottomTabNavigator();
 
 export default function App() {
   useEffect(() => {
@@ -32,36 +33,36 @@ export default function App() {
     return () => subscription.remove();
   }, []);
 
-  return  (
-    <NavigationContainer>
-      <Tab.Navigator
-        tabBar={() => <BottonNavigation/>}
-        screenOptions={{
-          headerTitleAlign: 'center'
-        }}>
-        
-         
+  return (
+    <OrderProvider>
+      <NavigationContainer>
+
+        <TableIdentificationDialog/>
+        <Tab.Navigator
+          tabBar={() => <BottonNavigation />}
+          screenOptions={{
+            headerTitleAlign: "center",
+          }}
+        >
           <Tab.Screen
-            name='Mesas'
+            name="Mesas"
             component={TableScreen}
-            options={{headerTitle: 'MESAS'}}
+            options={{ headerTitle: "MESAS" }}
           />
-
-           <Tab.Screen
-            name='Cardapio'
-            component={MenuScreen}
-            options={{headerTitle: 'CARDÁPIO'}}
-          />
-
 
           <Tab.Screen
-            name='Carrinho'
-            component={CartScreen}
-            options={{headerTitle: 'CARRINHO'}}
+            name="Cardapio"
+            component={MenuScreen}
+            options={{ headerTitle: "CARDÁPIO" }}
           />
-        
-        </Tab.Navigator>
 
-    </NavigationContainer>
+          <Tab.Screen
+            name="Carrinho"
+            component={CartScreen}
+            options={{ headerTitle: "CARRINHO" }}
+          />
+        </Tab.Navigator>
+      </NavigationContainer>
+    </OrderProvider>
   );
 }

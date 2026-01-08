@@ -1,6 +1,7 @@
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import style from "./style";
 import mesaImg from "../../../assets/mesaCard.png";
+import { useOrder } from "../../hooks/useOrder";
 
 type TableProps = {
   id: number;
@@ -9,8 +10,13 @@ type TableProps = {
 };
 
 export const Table = ({ id, tableNumber, statusTable }: TableProps) => {
+
+
+  const {startOrder} = useOrder()
+
+
   return (
-    <TouchableOpacity style={style.container}>
+    <TouchableOpacity style={style.container} onPress={() => startOrder(id)}>
       <View style={style.containerNumber}>
         <Text style={style.txtNumber}>MESA {tableNumber}</Text>
       </View>

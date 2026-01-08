@@ -3,6 +3,7 @@ import style from "./style";
 import { TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
+
 interface Product {
   id: number,
   name: string;
@@ -29,6 +30,9 @@ interface Section {
 
 
 export const ModalProductsContent = ({ product, isVisible, closeModal, category, sections }: ModalProps) => {
+
+  const order = false
+
   return (
     <Modal
       visible={isVisible}
@@ -54,10 +58,12 @@ export const ModalProductsContent = ({ product, isVisible, closeModal, category,
                 <Text style={style.txtPrice}>R$: {item.price},00</Text>
               </View>
               <View style={style.containerBtnAdd}>
-                <TouchableOpacity style={style.btnAdd}>
-                  <Ionicons name="add-outline" size={25} />
-                </TouchableOpacity>
-
+                {order && (
+                  <TouchableOpacity style={style.btnAdd}>
+                    <Ionicons name="add-outline" size={25} />
+                  </TouchableOpacity>
+                )
+                }
               </View>
             </View>
 

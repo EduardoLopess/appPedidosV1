@@ -1,40 +1,49 @@
-import { useState } from "react"
-import { TableData } from "../../../data/TableDataMock"
+import { useRef, useState } from "react";
+import { TableData } from "../../../data/TableDataMock";
 
 interface Table {
-    id: number,
-    tableNumber: number,
-    statusTable: boolean
+  id: number;
+  tableNumber: number;
+  statusTable: boolean;
 }
 
+type StatusFilter = "LIVRE" | "OCUPADA";
 
-const table: Table[] = TableData
+const table: Table[] = TableData;
 
 export const useFilter = () => {
-    
-    const [filter, setFilter] = useState<boolean | null>(null)
-    const [tableFilter, setTableFilter] = useState<Table[]>(table)
-    const [search, setSearch] = useState<string>("")
-    
-    const tableOrder = (status: boolean) => {  
-        if(filter === status) {
-            setTableFilter(table)
-            setFilter(null)
-            return
-        } else {
-            const tableOrder = table.filter(item => item.statusTable === status)
-            setTableFilter(tableOrder)
-            setFilter(status)
-        } 
+  const [tableFilter, setTableFilter] = useState<Table[]>(table);
+  const [search, setSearch] = useState<string>("");
+  const filterRef = useRef<string | undefined>(undefined);
+
+  const tableOrder = (filter: StatusFilter) => {
+    if (filterRef.current === filter) {
+      filterRef.current = undefined;
+      setTableFilter(table)
+      return;
     }
 
-    const searchTable = (value: string) => {
-        
-        const searchTable = table.filter(item => item.tableNumber.toString().includes(value))
-        setTableFilter(searchTable)
-            
+    
+  filterRef.current = filter;
 
+    if (filter == "LIVRE") {
+      const tableFilter = table.filter((item) => item.statusTable === false);
+      setTableFilter(tableFilter);
+    }
+    if (filter == "OCUPADA") {
+      const tableFilter = table.filter((item) => item.statusTable === true);
+      setTableFilter(tableFilter);
     }
 
-    return {searchTable, tableOrder, tableFilter, search, setSearch}
-}
+  
+  };
+
+  const searchTable = (value: string) => {
+    const searchTable = table.filter((item) =>
+      item.tableNumber.toString().includes(value)
+    );
+    setTableFilter(searchTable);
+  };
+
+  return { searchTable, tableOrder, tableFilter, search, setSearch };
+};
