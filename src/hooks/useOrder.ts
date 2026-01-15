@@ -1,45 +1,33 @@
 import { Alert } from "react-native";
 import { useOrderFlow } from "../context/orderFlow";
+import { useNavigation, NavigationProp } from "@react-navigation/native";
+import { useControllOrder } from "../context/controllOrder";
 
 interface PropsHoock {}
 
+type StackParamList = {
+  Produtos: undefined;
+};
+
 export const useOrder = () => {
-  const { closeTableDialog, tableAvailable, resetOrder } = useOrderFlow();
+  const { startOrder } = useControllOrder();
 
-  const startOrder = (id: number) => {
-    const result = tableAvailable(id);
+  const navigation = useNavigation<NavigationProp<StackParamList>>();
 
-    if (!result.ok) {
-      switch (result.error) {
-        case "OCCUPIED":
-          Alert.alert("MESA OCUPADA");
-          break;
+  const start = (id: number) => {
+    const result = startOrder(id);
 
-        case "LOCKED":
-          Alert.alert("PEDIDO EM ANDAMENTO");
-          break;
-
-        case "NOT_FOUND":
-          Alert.alert("MESA NÃO EXISTE");
-          break;
-
-        case "INVALID_ID":
-          Alert.alert("ID INVÁLIDO");
-          break;
-      }
-
-      return; // 🔴 SEMPRE retorna em erro
+    if (result) {
+      navigation.navigate("Produtos");
+      return;
     }
   };
 
-  const finishOrder = () => {
-    resetOrder();
-    closeTableDialog();
-  };
+  const finishOrder = () => {};
 
   const editOrder = () => {
     Alert.alert("PEDIDO EDITADO");
   };
 
-  return { startOrder, finishOrder };
+  return { start, finishOrder };
 };

@@ -1,18 +1,23 @@
-import { Modal, View } from "react-native";
+import { View, Text } from "react-native";
 import style from "./style";
 import { useOrderFlow } from "../../context/orderFlow";
-import { useModal } from "../../utils/hoocks/useModal";
+import { useControllOrder } from "../../context/controllOrder";
 
 export const TableIdentificationDialog = () => {
-
-  const { isTableDialogVisibily } = useOrderFlow();
-  const {openModal,isVisible, closeModal} = useModal()
-
+  const { isTableDialogVisibily, orderTableNumber } = useControllOrder();
   if (!isTableDialogVisibily) return null;
   
+ 
+
+
+
   if (isTableDialogVisibily) {
-    openModal()
-  
-    
+    return (
+      <View style={style.container}>
+        <View style={style.content}>
+          <Text style={style.txt}>PEDIDO INICIADO MESA {orderTableNumber}</Text>
+        </View>
+      </View>
+    );
   }
 };

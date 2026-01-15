@@ -5,6 +5,7 @@ import { useDialogController } from "../components/dialog/useDialog";
 
 interface OrderFlowProps {
   tableAvailable: (idTable: number) => ValidationResult;
+  orderTableNumber?: number
   resetOrder: () => void;
   isTableDialogVisibily: boolean;
   openTableDialog: () => void;
@@ -27,6 +28,7 @@ export const OrderProvider = ({ children }: OrderFlowProviderProps) => {
   const { isDialogVisibily, openDialog, closeDialog } = useDialogController();
 
   const orderStartLockRef = useRef<number | undefined>(undefined);
+  const [orderTableNumber, setOrderTableNumber] = useState<number | undefined>()
 
   const tableAvailable = (idTable: number): ValidationResult => {
     if (!idTable) return { ok: false, error: "INVALID_ID" };
@@ -42,17 +44,23 @@ export const OrderProvider = ({ children }: OrderFlowProviderProps) => {
     if (table.statusTable === true) return { ok: false, error: "OCCUPIED" };
 
     orderStartLockRef.current = table.tableNumber;
+    setOrderTableNumber(table.tableNumber)
 
     openDialog()
+  
 
     return { ok: true, table };
   };
 
-  const resetOrder = () => (orderStartLockRef.current = undefined);
+  const resetOrder = () => {
+     orderStartLockRef.current = undefined
+     setOrderTableNumber(undefined)
+  };
 
   return (
     <OrderFlowContext.Provider
       value={{
+        orderTableNumber,
         tableAvailable,
         resetOrder,
         isTableDialogVisibily: isDialogVisibily,

@@ -12,11 +12,11 @@ type TableProps = {
 export const Table = ({ id, tableNumber, statusTable }: TableProps) => {
 
 
-  const {startOrder} = useOrder()
+  const {start} = useOrder()
 
 
   return (
-    <TouchableOpacity style={style.container} onPress={() => startOrder(id)}>
+    <TouchableOpacity style={style.container} onPress={() => start(id)}>
       <View style={style.containerNumber}>
         <Text style={style.txtNumber}>MESA {tableNumber}</Text>
       </View>

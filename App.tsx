@@ -10,6 +10,7 @@ import { MenuScreen } from "./src/screens/menu-product/Index";
 import { CartScreen } from "./src/screens/cart/Index";
 import { OrderProvider } from "./src/context/orderFlow";
 import { TableIdentificationDialog } from "./src/components/dialog/Index";
+import { ControllOrderProvider } from "./src/context/controllOrder";
 
 export type RootTabParamList = {
   Cardapio: undefined;
@@ -34,35 +35,36 @@ export default function App() {
   }, []);
 
   return (
-    <OrderProvider>
-      <NavigationContainer>
+    <ControllOrderProvider>
+      <OrderProvider>
+        <TableIdentificationDialog />
+        <NavigationContainer>
+          <Tab.Navigator
+            tabBar={() => <BottonNavigation />}
+            screenOptions={{
+              headerTitleAlign: "center",
+            }}
+          >
+            <Tab.Screen
+              name="Mesas"
+              component={TableScreen}
+              options={{ headerTitle: "MESAS" }}
+            />
 
-        <TableIdentificationDialog/>
-        <Tab.Navigator
-          tabBar={() => <BottonNavigation />}
-          screenOptions={{
-            headerTitleAlign: "center",
-          }}
-        >
-          <Tab.Screen
-            name="Mesas"
-            component={TableScreen}
-            options={{ headerTitle: "MESAS" }}
-          />
+            <Tab.Screen
+              name="Cardapio"
+              component={MenuScreen}
+              options={{ headerTitle: "CARDÁPIO" }}
+            />
 
-          <Tab.Screen
-            name="Cardapio"
-            component={MenuScreen}
-            options={{ headerTitle: "CARDÁPIO" }}
-          />
-
-          <Tab.Screen
-            name="Carrinho"
-            component={CartScreen}
-            options={{ headerTitle: "CARRINHO" }}
-          />
-        </Tab.Navigator>
-      </NavigationContainer>
-    </OrderProvider>
+            <Tab.Screen
+              name="Carrinho"
+              component={CartScreen}
+              options={{ headerTitle: "CARRINHO" }}
+            />
+          </Tab.Navigator>
+        </NavigationContainer>
+      </OrderProvider>
+    </ControllOrderProvider>
   );
 }

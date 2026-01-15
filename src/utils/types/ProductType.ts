@@ -12,3 +12,10 @@ export interface Table {
   tableNumber: number;
   statusTable: boolean;
 }
+
+
+
+export interface Cart {
+  product: Product[],
+  qtd: number
+}
