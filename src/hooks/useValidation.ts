@@ -10,26 +10,20 @@ type ValidationResult =
   | { ok: true; table: Table}
   | { ok: false; error: "INVALID_ID" | "NOT_FOUND" | "OCCUPIED" | "LOCKED" };
 
-export const useValidation = (): ValidationProps => {
-  const { tableData, currentControlValue } = useControllOrder();
-
-  const tableAvailable = (idTable: number): ValidationResult => {
+// useValidation.ts
+export const createValidation = (tableData: Table[], currentControlValue?: number) => {
+  const tableAvailable = (idTable: number) => {
     if (!idTable) return { ok: false, error: "INVALID_ID" };
-
-    if (currentControlValue !== undefined) {
-      return { ok: false, error: "LOCKED" };
-    }
-
-    const table = tableData.find((item) => item.id === idTable);
-
+    if (currentControlValue !== undefined) return { ok: false, error: "LOCKED" };
+    
+    const table = tableData.find(t => t.id === idTable);
     if (!table) return { ok: false, error: "NOT_FOUND" };
-
-    if (table.statusTable === true) return { ok: false, error: "OCCUPIED" };
+    if (table.statusTable) return { ok: false, error: "OCCUPIED" };
 
     return { ok: true, table };
   };
 
-  return {
-    tableAvailable,
-  };
+  return { tableAvailable };
 };
+
+

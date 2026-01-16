@@ -2,7 +2,7 @@ import { createContext, ReactNode, useContext, useRef, useState } from "react";
 import { Product, Table } from "../utils/types/ProductType";
 import { ProductData } from "../../data/ProductDataMock";
 import { TableData } from "../../data/TableDataMock";
-import { useValidation } from "../hooks/useValidation";
+import { createValidation } from "../hooks/useValidation";
 import { useDialogController } from "../components/dialog/useDialog";
 
 interface ControllOrderProps {
@@ -10,7 +10,7 @@ interface ControllOrderProps {
   tableData: Table[];
   orderTableNumber: number | undefined,
   startOrder: (idTable: number) => boolean;
-  currentControlValue: number | undefined;
+ 
   getValueMensageRef: () => string | undefined;
   isTableDialogVisibily: boolean;
   openTableDialog: () => void;
@@ -30,19 +30,25 @@ const ControllOrderContext = createContext<ControllOrderProps | undefined>(
 
 export const ControllOrderProvider = ({children}: ControllOrderProviderProps) => {
 
+  
+  //TRAVA APP QUANDO PEDIDO INICIAR
+  const orderStartLockRef = useRef<number | undefined>(undefined);
+  //MENSAGEM DE CONTROLE DA VALIDACAO
+  const mensageRef = useRef<string | undefined>(undefined);
+  const getValueOrderLockRef = () => orderStartLockRef.current;
+
+  
   //HOOCKS CUSTOM
-  const { tableAvailable } = useValidation();
+
+  const { tableAvailable } = createValidation(tableData, getValueOrderLockRef());
   const { isDialogVisibily, openDialog, closeDialog } = useDialogController();
 
   //STATES GLOBAL
   const [orderTableNumber, setOrderTableNumber] = useState<number | undefined>();
 
-  //TRAVA APP QUANDO PEDIDO INICIAR
-  const orderStartLockRef = useRef<number | undefined>(undefined);
-  //MENSAGEM DE CONTROLE DA VALIDACAO
-  const mensageRef = useRef<string | undefined>(undefined);
 
-  const getValueRef = () => orderStartLockRef.current;
+
+
   const resetStartLockRef = () => (orderStartLockRef.current = undefined);
 
   const getValueMensageRef = () => mensageRef.current;
@@ -76,7 +82,7 @@ export const ControllOrderProvider = ({children}: ControllOrderProviderProps) =>
       return false;
     }
 
-    const table = result.table.tableNumber;
+    const table = result.table?.tableNumber;
     orderStartLockRef.current = table;
     setOrderTableNumber(table);
     
@@ -95,9 +101,9 @@ export const ControllOrderProvider = ({children}: ControllOrderProviderProps) =>
         getValueMensageRef,
         isTableDialogVisibily: isDialogVisibily,
         openTableDialog: openDialog,
-        closeTableDialog: closeDialog,
+        closeTableDialog: closeDialog
 
-        currentControlValue: getValueRef(),
+        
       }}
     >
       {children}
