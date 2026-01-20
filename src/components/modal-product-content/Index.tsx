@@ -3,6 +3,7 @@ import style from "./style";
 import { TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useOrderFlow } from "../../context/orderFlow";
+import { useControllOrder } from "../../context/controllOrder";
 
 
 interface Product {
@@ -32,7 +33,7 @@ interface Section {
 
 export const ModalProductsContent = ({ isVisible, closeModal, category, sections }: ModalProps) => {
 
-  const {orderTableNumber} = useOrderFlow()
+  const {orderStarted} = useControllOrder()
 
   return (
     <Modal
@@ -59,7 +60,7 @@ export const ModalProductsContent = ({ isVisible, closeModal, category, sections
                 <Text style={style.txtPrice}>R$: {item.price},00</Text>
               </View>
               <View style={style.containerBtnAdd}>
-                {orderTableNumber && (
+                {orderStarted && (
                   <TouchableOpacity style={style.btnAdd}>
                     <Ionicons name="add-outline" size={25} />
                   </TouchableOpacity>

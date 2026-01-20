@@ -4,10 +4,10 @@ import { useOrder } from "../../hooks/useOrder";
 
 export const CartScreen = () => {
 
-    const {finishOrder} = useOrder()
+    const {finishOrder, cancelOrder} = useOrder()
   return (
     <>
-      <TouchableOpacity onPress={finishOrder}>
+      <TouchableOpacity onPress={cancelOrder}>
         <Text>FECHAR</Text>
       </TouchableOpacity>
     </>

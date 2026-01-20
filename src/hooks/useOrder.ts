@@ -6,11 +6,11 @@ import { useControllOrder } from "../context/controllOrder";
 interface PropsHoock {}
 
 type StackParamList = {
-  Produtos: undefined;
+  Cardapio: undefined;
 };
 
 export const useOrder = () => {
-  const { startOrder } = useControllOrder();
+  const { startOrder, resetOrderState } = useControllOrder();
 
   const navigation = useNavigation<NavigationProp<StackParamList>>();
 
@@ -18,7 +18,7 @@ export const useOrder = () => {
     const result = startOrder(id);
 
     if (result) {
-      navigation.navigate("Produtos");
+      navigation.navigate("Cardapio");
       return;
     }
   };
@@ -29,5 +29,7 @@ export const useOrder = () => {
     Alert.alert("PEDIDO EDITADO");
   };
 
-  return { start, finishOrder };
+  const cancelOrder = () => resetOrderState()
+
+  return { start, finishOrder , cancelOrder};
 };

@@ -11,6 +11,7 @@ import { CartScreen } from "./src/screens/cart/Index";
 import { OrderProvider } from "./src/context/orderFlow";
 import { TableIdentificationDialog } from "./src/components/dialog/Index";
 import { ControllOrderProvider } from "./src/context/controllOrder";
+import { Mensage } from "./src/components/mensage/Index";
 
 export type RootTabParamList = {
   Cardapio: undefined;
@@ -37,6 +38,7 @@ export default function App() {
   return (
     <ControllOrderProvider>
       <OrderProvider>
+        <Mensage/>
         <TableIdentificationDialog />
         <NavigationContainer>
           <Tab.Navigator
