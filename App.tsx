@@ -8,10 +8,12 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { TableScreen } from "./src/screens/table/Index";
 import { MenuScreen } from "./src/screens/menu-product/Index";
 import { CartScreen } from "./src/screens/cart/Index";
-import { OrderProvider } from "./src/context/orderFlow";
+
 import { TableIdentificationDialog } from "./src/components/dialog/Index";
 import { ControllOrderProvider } from "./src/context/controllOrder";
 import { Mensage } from "./src/components/mensage/Index";
+import ToastManager from "toastify-react-native";
+
 
 export type RootTabParamList = {
   Cardapio: undefined;
@@ -37,8 +39,9 @@ export default function App() {
 
   return (
     <ControllOrderProvider>
-      <OrderProvider>
+      
         <Mensage/>
+        <ToastManager />
         <TableIdentificationDialog />
         <NavigationContainer>
           <Tab.Navigator
@@ -66,7 +69,7 @@ export default function App() {
             />
           </Tab.Navigator>
         </NavigationContainer>
-      </OrderProvider>
+    
     </ControllOrderProvider>
   );
 }

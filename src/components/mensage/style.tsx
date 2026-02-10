@@ -1,24 +1,32 @@
 import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    zIndex: 99999,
+  overlay: {
     position: "absolute",
-  },
-
-  containerMensage: {
-    width: 100,
-    height: 100,
-    backgroundColor: "blue",
-    alignItems: "center",
-    justifyContent: "center",
-    position: "absolute",
-    top: 40,
+    top: 0,
     left: 0,
     right: 0,
-    zIndex: 99999,
+    bottom: 0,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.4)", // fundo escuro transparente
+    zIndex: 999,
+    elevation: 999, // Android
+  },
+  box: {
+    width: "80%",
+    padding: 20,
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    alignItems: "center",
+  },
+  text: {
+    marginBottom: 15,
+    fontSize: 16,
+    textAlign: "center",
+  },
+  button: {
+    fontWeight: "bold",
+    color: "red",
   },
 });

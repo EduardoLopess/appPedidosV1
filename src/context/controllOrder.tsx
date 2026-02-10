@@ -8,16 +8,21 @@ import { useDialogController } from "../components/dialog/useDialog";
 interface ControllOrderProps {
   products: Product[];
   tableData: Table[];
-  orderTableNumber: number | undefined
+  orderTableNumber: number | undefined;
   orderStarted: boolean;
-  startOrder: (idTable: number) => boolean;
-  resetMensage: () => void
+  startOrder: (idTable: number) => StatusOrder;
+  resetMensage: () => void;
   mensageValue: string | undefined;
   isTableDialogVisibily: boolean;
   openTableDialog: () => void;
   closeTableDialog: () => void;
-  resetOrderState: () => void
+  resetOrderState: () => void;
 }
+
+type StatusOrder =
+  | { ok: true; status: "created" }
+  | { ok: true; status: "already_exists" }
+  | { ok: false; status: "error" };
 
 interface ControllOrderProviderProps {
   children: ReactNode;
@@ -28,25 +33,32 @@ const products: Product[] = ProductData;
 const tableData: Table[] = TableData;
 
 const ControllOrderContext = createContext<ControllOrderProps | undefined>(
-  undefined
+  undefined,
 );
 
-export const ControllOrderProvider = ({ children }: ControllOrderProviderProps) => {
-
+export const ControllOrderProvider = ({
+  children,
+}: ControllOrderProviderProps) => {
   // TRAVA APP QUANDO PEDIDO INICIAR
   const orderStartLockRef = useRef<number | undefined>(undefined);
   const getValueOrderLockRef = () => orderStartLockRef.current;
 
   // MENSAGEM (AGORA REATIVA)
-  const [mensageValue, setMensageValue] = useState<string | undefined>(undefined);
-
-  // HOOKS CUSTOM
-  const { tableAvailable } = createValidation(tableData, getValueOrderLockRef());
-  const { isDialogVisibily, openDialog, closeDialog } = useDialogController();
+  const [mensageValue, setMensageValue] = useState<string | undefined>(
+    undefined,
+  );
 
   // STATES GLOBAL
   const [orderStarted, setOrderStarted] = useState<boolean>(false);
-  const [orderTableNumber, setTableNumber] = useState<number | undefined>()
+  const [orderTableNumber, setTableNumber] = useState<number | undefined>();
+
+  // HOOKS CUSTOM
+  const { tableAvailable } = createValidation(
+    tableData,
+    orderTableNumber,
+    getValueOrderLockRef(),
+  );
+  const { isDialogVisibily, openDialog, closeDialog } = useDialogController();
 
   const resetStartLockRef = () => {
     orderStartLockRef.current = undefined;
@@ -56,8 +68,12 @@ export const ControllOrderProvider = ({ children }: ControllOrderProviderProps) 
     setMensageValue(undefined);
   };
 
-  const startOrder = (idTable: number) => {
+  const startOrder = (idTable: number): StatusOrder => {
     const result = tableAvailable(idTable);
+
+    if (orderStartLockRef.current === result.table?.tableNumber) {
+      return { ok: true, status: "already_exists" };
+    }
 
     if (!result.ok) {
       switch (result.error) {
@@ -68,36 +84,34 @@ export const ControllOrderProvider = ({ children }: ControllOrderProviderProps) 
           setMensageValue("ID INVALIDO");
           break;
         case "LOCKED":
-          setMensageValue("PEDIDO EM ABERTO");
+          setMensageValue(`Pedido já iniciado MESA ${orderTableNumber}`);
+
           break;
         case "NOT_FOUND":
           setMensageValue("MESA NÃO EXISTE");
           break;
       }
-      return false;
+      return { ok: false, status: "error" };
     }
 
     const table = result.table?.tableNumber;
     orderStartLockRef.current = table;
     setOrderStarted(true);
-    setTableNumber(table)
+    setTableNumber(table);
     resetMensage();
     openDialog();
 
-    return true;
+    return { ok: true, status: "created" };
   };
-
-
-
 
   //FUNCAO QUE LIMPA OS STATES DO PEDIDO E REFs
   const resetOrderState = () => {
-    closeDialog()
-    resetStartLockRef()
-    setOrderStarted(false)
-    resetMensage()
-    setTableNumber(undefined)
-  }
+    closeDialog();
+    resetStartLockRef();
+    setOrderStarted(false);
+    resetMensage();
+    setTableNumber(undefined);
+  };
 
   return (
     <ControllOrderContext.Provider
@@ -112,7 +126,7 @@ export const ControllOrderProvider = ({ children }: ControllOrderProviderProps) 
         mensageValue,
         isTableDialogVisibily: isDialogVisibily,
         openTableDialog: openDialog,
-        closeTableDialog: closeDialog
+        closeTableDialog: closeDialog,
       }}
     >
       {children}
@@ -125,7 +139,7 @@ export const useControllOrder = () => {
 
   if (!context) {
     throw new Error(
-      "useControllOrder must be used within ControllOrderProvider"
+      "useControllOrder must be used within ControllOrderProvider",
     );
   }
 

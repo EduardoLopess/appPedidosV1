@@ -2,6 +2,7 @@ import { Alert } from "react-native";
 import { useOrderFlow } from "../context/orderFlow";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { useControllOrder } from "../context/controllOrder";
+import { Toast } from "toastify-react-native";
 
 interface PropsHoock {}
 
@@ -17,8 +18,21 @@ export const useOrder = () => {
   const start = (id: number) => {
     const result = startOrder(id);
 
-    if (result) {
+    if(result.status === 'already_exists') {
       navigation.navigate("Cardapio");
+      return
+    }
+
+    if (result.status === 'created') {
+      navigation.navigate("Cardapio");
+
+      Toast.show({
+        type: "success",
+        text1: "PEDIDO INICIADO",
+        autoHide: true,
+        visibilityTime: 1500,
+      });
+
       return;
     }
   };
@@ -29,7 +43,7 @@ export const useOrder = () => {
     Alert.alert("PEDIDO EDITADO");
   };
 
-  const cancelOrder = () => resetOrderState()
+  const cancelOrder = () => resetOrderState();
 
-  return { start, finishOrder , cancelOrder};
+  return { start, finishOrder, cancelOrder };
 };
