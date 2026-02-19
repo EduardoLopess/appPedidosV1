@@ -24,38 +24,41 @@ export default StyleSheet.create({
   },
 
   containerBtnActions: {
-    flexDirection: "row",
+    flexDirection: 'column',
     height: 100,
     borderTopWidth: 2,
     borderColor: "#C1C2C1",
     justifyContent: "center",
     alignItems: "center",
-    gap: 10,
+   
   },
 
   btnCancel: {
     width: "40%",
-    backgroundColor: "red",
+    backgroundColor: "transparent",
     height: "50%",
     borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",
-    elevation: 5,
+    
+   
   },
 
   txtCancel: {
-    color: "white",
+    color: "red",
     fontWeight: "bold",
+    textDecorationLine: 'underline'
   },
 
   btnFinish: {
     width: "40%",
     backgroundColor: "green",
-    height: "50%",
+    height: "40%",
     borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",
     elevation: 5,
+    marginBottom: 15
   },
 
   txtFinish: {

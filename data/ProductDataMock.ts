@@ -57,3 +57,22 @@ export const ProductData = [
   { id: 47, name: "PICADÃO", price: 150, category: "PORÇÕES", type: "PRINCIPAIS", available: true },
   { id: 48, name: "CAMARÃO EMPANADO", price: 120, category: "PORÇÕES", type: "PRINCIPAIS", available: true }
 ];
+
+export const ExtraData = [
+  {id: 1, name: 'Morango', category: 'Drink', type: 'Sabor', available: true},
+  {id: 2, name: 'Limão', category: 'Drink', type: 'Sabor', available: true},
+  {id: 3, name: 'Abacaxi', category: 'Drink', type: 'Sabor', available: true},
+  {id: 4, name: 'Morango', category: 'Suco', type: 'Sabor', available: true},
+  {id: 5, name: 'Abacaxi', category: 'Suco', type: 'Sabor', available: true},
+  {id: 6, name: 'Uva', category: 'Drink', type: 'Sabor', available: true},
+]
+
+export const AdcData = [
+  {id: 1, name: 'Bife Gado', category: 'Adicional', type: 'Adicional', available: true, price: 15.00},
+  {id: 2, name: 'Bife frango', category: 'Adicional', type: 'Adicional', available: true, price: 15.00},
+  {id: 3, name: 'Ovo', category: 'Adicional', type: 'Adicional', available: true, price: 2.00},
+  {id: 4, name: 'Catupiry', category: 'Adicional', type: 'Adicional', available: true, price: 2.00},
+  {id: 5, name: 'Cheddar', category: 'Adicional', type: 'Adicional', available: true, price: 2.00},
+  {id: 6, name: 'bacon', category: 'Adicional', type: 'Adicional', available: true, price: 2.00},
+  {id: 7, name: 'Mussarela', category: 'Adicional', type: 'Adicional', available: true, price: 2.00},
+]

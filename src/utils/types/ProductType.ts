@@ -16,6 +16,6 @@ export interface Table {
 
 
 export interface Cart {
-  product: Product[],
+  product: Product,
   qtd: number
 }

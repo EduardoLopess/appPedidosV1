@@ -45,12 +45,7 @@ export const CartScreen = () => {
     <View style={style.container}>
 
       <View style={style.containerContent}>
-        {DataTest.map(item => {
-          <View>
-            
-          </View>
-        })}
-
+     
       </View>
 
       <View style={style.containerTotal}>

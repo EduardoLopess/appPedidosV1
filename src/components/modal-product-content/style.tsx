@@ -132,8 +132,8 @@ export default StyleSheet.create({
   },
 
   btn: {
-    width: "60%",
-    height: "70%",
+    width: "40%",
+    height: "60%",
     backgroundColor: "red",
     borderRadius: 20,
     elevation: 5,
