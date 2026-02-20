@@ -13,7 +13,7 @@ import { TableIdentificationDialog } from "./src/components/dialog/Index";
 import { ControllOrderProvider } from "./src/context/controllOrder";
 import { Mensage } from "./src/components/mensage/Index";
 import ToastManager from "toastify-react-native";
-
+import { CartProvider } from "./src/context/cartContext";
 
 export type RootTabParamList = {
   Cardapio: undefined;
@@ -32,15 +32,15 @@ export default function App() {
         if (nextAppState === "active") {
           await NavigationBar.setVisibilityAsync("hidden");
         }
-      }
+      },
     );
     return () => subscription.remove();
   }, []);
 
   return (
     <ControllOrderProvider>
-      
-        <Mensage/>
+      <CartProvider>
+        <Mensage />
         <ToastManager />
         <TableIdentificationDialog />
         <NavigationContainer>
@@ -69,7 +69,7 @@ export default function App() {
             />
           </Tab.Navigator>
         </NavigationContainer>
-    
+      </CartProvider>
     </ControllOrderProvider>
   );
 }

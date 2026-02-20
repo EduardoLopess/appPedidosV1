@@ -73,7 +73,7 @@ export default StyleSheet.create({
     height: '100%',
     justifyContent: 'center',
     borderRightWidth: 1,
-    paddingLeft: 5,
+    paddingLeft: 10,
     borderColor: '#C1C2C1'
 
 
@@ -84,7 +84,7 @@ export default StyleSheet.create({
     height: '100%',
     justifyContent: 'center',
     borderRightWidth: 1,
-    paddingLeft: 5,
+    paddingLeft: 10,
     borderColor: '#C1C2C1'
 
   },

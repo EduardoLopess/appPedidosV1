@@ -13,9 +13,18 @@ export interface Table {
   statusTable: boolean;
 }
 
+export interface Aditional {
+  id: number,
+  name: string
+  price?: number
+}
+
 
 
 export interface Cart {
   product: Product,
   qtd: number
+  adc?: Aditional[]
 }
+
+

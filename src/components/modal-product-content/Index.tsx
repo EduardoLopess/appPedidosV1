@@ -4,16 +4,10 @@ import { TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useOrderFlow } from "../../context/orderFlow";
 import { useControllOrder } from "../../context/controllOrder";
+import { Product } from "../../utils/types/ProductType";
+import { useCart } from "../../context/cartContext";
 
 
-interface Product {
-  id: number,
-  name: string;
-  price: number;
-  category: string;
-  type: string;
-  available: boolean;
-}
 
 interface ModalProps {
   product: Product[];
@@ -34,6 +28,7 @@ interface Section {
 export const ModalProductsContent = ({ isVisible, closeModal, category, sections }: ModalProps) => {
 
   const {orderStarted} = useControllOrder()
+  const {addItemCart} = useCart()
 
   return (
     <Modal
@@ -61,7 +56,7 @@ export const ModalProductsContent = ({ isVisible, closeModal, category, sections
               </View>
               <View style={style.containerBtnAdd}>
                 {orderStarted && (
-                  <TouchableOpacity style={style.btnAdd}>
+                  <TouchableOpacity style={style.btnAdd} onPress={() => addItemCart(item.id)}>
                     <Ionicons name="add-outline" size={25} />
                   </TouchableOpacity>
                 )

@@ -10,8 +10,8 @@ export default StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(0,0,0,0.4)", // fundo escuro transparente
-    zIndex: 999,
-    elevation: 999, // Android
+    zIndex: 9990099099,
+    elevation: 9999999, // Android
   },
   box: {
     width: "80%",

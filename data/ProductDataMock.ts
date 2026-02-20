@@ -5,7 +5,7 @@ export const ProductData = [
   { id: 4, name: "ENERGÉTICO 473ML", price: 15, category: "BEBIDAS", type: "NÃO ALCOÓLICAS", available: true },
   { id: 5, name: "SUCO", price: 15, category: "BEBIDAS", type: "NÃO ALCOÓLICAS", available: true },
 
-  { id: 6, name: "POLAR LATÃO", price: 10, category: "CERVEJAS", type: "LATÃO", available: true },
+  { id: 6, name: "POLAR LATÃO", price: 10, category: "CERVEJAS", type: "LATÃO", available: false },
   { id: 7, name: "AMSTEL LATÃO", price: 10, category: "CERVEJAS", type: "LATÃO", available: true },
   { id: 8, name: "BRAHMA LATÃO", price: 10, category: "CERVEJAS", type: "LATÃO", available: true },
 
