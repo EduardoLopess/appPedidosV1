@@ -1,13 +1,16 @@
 import { createContext, ReactNode, useContext, useState } from "react";
 import { useControllOrder } from "./controllOrder";
-import { Cart, Product } from "../utils/types/ProductType";
+import { Cart, Flavor, Product } from "../utils/types/ProductType";
 import { Toast } from "toastify-react-native";
+import { useDataContext } from "./dataContext";
 
 interface CartProps {
   cartItem: Cart[] | undefined;
   addItemCart: (itemId: number) => void;
-  clearCart: () => void,
-  removeItem: (idItem: number) => void
+  clearCart: () => void;
+  removeItem: (idItem: number) => void;
+  isOpenModalFlavor: boolean;
+  flavorTemporaryData: Flavor[] | undefined
 }
 
 type StatusError =
@@ -24,10 +27,11 @@ type StatusError =
 const CartContext = createContext<CartProps | undefined>(undefined);
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
-  //STATE DE UI
-  const [cartItem, setItemCart] = useState<Cart[]>([]);
+  const [cartItem, setItemCart] = useState<Cart[]>([]); //STATE DE UI
+  const [flavorTemporaryData, setFlavorTemporaryData] = useState<Flavor[] | undefined>()
 
-  const { products, setMensage } = useControllOrder();
+  const { setMensage } = useControllOrder(); //Context
+  const { products: productData, additions, flavor: flavorData } = useDataContext();
 
   const containsProduct = (id: number) => {
     const product = cartItem.find((item) => item.product.id === id);
@@ -37,6 +41,17 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     return true;
   };
 
+  const containsFlavor = (productItem: Product) => {
+    const checkFlavor = productItem.addons?.flavorIds ?? []
+    if(checkFlavor?.length > 0) {
+      const dataTemporary = flavorData.filter(item => checkFlavor.includes(item.id))
+      setFlavorTemporaryData(dataTemporary)
+      
+    }
+
+    return productItem
+  }
+
   const addQtdProduct = (idItem: number) => {
     const newQtd = cartItem.map((item) =>
       item.product.id === idItem ? { ...item, qtd: item.qtd + 1 } : item,
@@ -45,10 +60,11 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     return newQtd;
   };
 
+  //busca item
   const searchItem = (itemId: number): StatusError => {
     if (!itemId) return { ok: false, error: "INVALID_ID" };
 
-    const productItem = products.find((item) => item.id == itemId);
+    const productItem = productData.find((item) => item.id == itemId);
 
     if (!productItem) return { ok: false, error: "PRODUCT_NOT_FOUND" };
 
@@ -68,9 +84,15 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         PRODUCT_NOT_FOUND: "Produto não encontado.",
         PRODUCT_UNAVAILABLE: "Produto indisponível",
       };
+
       setMensage(errorMap[productResult.error!] || "ERROR");
       return { ok: false, error: "ERROR" };
     }
+
+    //VERIICAR SE TEM SABOR
+    const flavorCheck = containsFlavor(productResult.product)
+
+
 
     //FUNCAO QUE VERIFICA SE O PRODUTO JA ESTA NO CARRINHO TRUE/FALSE
     const contains = containsProduct(productResult.product.id);
@@ -99,15 +121,11 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
-
-  const removeItem = (idItem: number) => {
-
-  }
-
+  const removeItem = (idItem: number) => {};
 
   const clearCart = () => {
-    setItemCart([])
-  }
+    setItemCart([]);
+  };
 
   return (
     <CartContext.Provider
@@ -115,7 +133,9 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         addItemCart,
         cartItem,
         clearCart,
-        removeItem
+        removeItem,
+        isOpenModalFlavor: true,
+        flavorTemporaryData
       }}
     >
       {children}

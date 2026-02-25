@@ -8,6 +8,8 @@ import { useCart } from "../../context/cartContext";
 export const CartScreen = () => {
   const { finishOrder, cancelOrder } = useOrder();
   const { cartItem } = useCart();
+  const {orderTableNumber} = useControllOrder();
+
   console.log(JSON.stringify(cartItem, null, 2));
   console.log(cartItem)
 
@@ -20,7 +22,7 @@ export const CartScreen = () => {
       </View>
 
       <View style={style.containerBtnActions}>
-        <TouchableOpacity onPress={cancelOrder} style={style.btnCancel}>
+        <TouchableOpacity disabled={!orderTableNumber} onPress={cancelOrder} style={style.btnCancel}>
           <Text style={style.txtCancel}>CANCELAR PEDIDO</Text>
         </TouchableOpacity>
 

@@ -3,11 +3,11 @@ import { StyleSheet } from "react-native";
 export default StyleSheet.create({
   container: {
     width: "100%",
-    height: 65,
+    height: 60,
     alignItems: 'center',
     justifyContent: 'center',
     position: "absolute",
-    top: 40,
+    top: 35,
     left: 0,
     right: 0,
     zIndex: 99999,

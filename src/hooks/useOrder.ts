@@ -43,7 +43,16 @@ export const useOrder = () => {
     Alert.alert("PEDIDO EDITADO");
   };
 
-  const cancelOrder = () => resetOrderState();
+  const cancelOrder = () => {
+    Alert.alert (
+      'Cancelar!',
+      'Deseja cancelar o pedido?',
+      [
+        {text: 'Não', style: 'cancel'},
+        {text: 'Sim', onPress: () =>  resetOrderState()}
+      ]
+    )
+  };
 
   return { start, finishOrder, cancelOrder };
 };

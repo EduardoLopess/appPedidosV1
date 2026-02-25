@@ -5,6 +5,10 @@ export interface Product {
   category: string;
   type: string;
   available: boolean;
+  addons?: {
+    flavorIds?: number[];
+    aditionsIds?: number[];
+  };
 }
 
 export interface Table {
@@ -13,18 +17,22 @@ export interface Table {
   statusTable: boolean;
 }
 
-export interface Aditional {
-  id: number,
-  name: string
-  price?: number
+export interface Flavor {
+  id: number;
+  name: string;
+  available: boolean;
 }
 
-
+export interface Aditional {
+  id: number;
+  name: string;
+  price: number;
+  available: boolean;
+}
 
 export interface Cart {
-  product: Product,
-  qtd: number
-  adc?: Aditional[]
+  product: Product;
+  qtd: number;
+  adc?: Aditional[];
+  flavor?: Flavor;
 }
-
-

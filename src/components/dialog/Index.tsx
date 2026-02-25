@@ -9,7 +9,7 @@ export const TableIdentificationDialog = () => {
     return (
       <View style={style.container}>
         <View style={style.content}>
-          <Text style={style.txt}>PEDIDO INICIADO MESA {orderTableNumber}</Text>
+          <Text style={style.txt}>Pedido aberto MESA {orderTableNumber}.</Text>
         </View>
       </View>
     );

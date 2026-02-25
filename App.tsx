@@ -14,6 +14,7 @@ import { ControllOrderProvider } from "./src/context/controllOrder";
 import { Mensage } from "./src/components/mensage/Index";
 import ToastManager from "toastify-react-native";
 import { CartProvider } from "./src/context/cartContext";
+import { DataProvider } from "./src/context/dataContext";
 
 export type RootTabParamList = {
   Cardapio: undefined;
@@ -38,38 +39,40 @@ export default function App() {
   }, []);
 
   return (
-    <ControllOrderProvider>
-      <CartProvider>
-        <Mensage />
-        <ToastManager />
-        <TableIdentificationDialog />
-        <NavigationContainer>
-          <Tab.Navigator
-            tabBar={() => <BottonNavigation />}
-            screenOptions={{
-              headerTitleAlign: "center",
-            }}
-          >
-            <Tab.Screen
-              name="Mesas"
-              component={TableScreen}
-              options={{ headerTitle: "MESAS" }}
-            />
+    <DataProvider>
+      <ControllOrderProvider>
+        <CartProvider>
+          <Mensage />
+          <ToastManager />
+          <TableIdentificationDialog />
+          <NavigationContainer>
+            <Tab.Navigator
+              tabBar={() => <BottonNavigation />}
+              screenOptions={{
+                headerTitleAlign: "center",
+              }}
+            >
+              <Tab.Screen
+                name="Mesas"
+                component={TableScreen}
+                options={{ headerTitle: "MESAS" }}
+              />
 
-            <Tab.Screen
-              name="Cardapio"
-              component={MenuScreen}
-              options={{ headerTitle: "CARDÁPIO" }}
-            />
+              <Tab.Screen
+                name="Cardapio"
+                component={MenuScreen}
+                options={{ headerTitle: "CARDÁPIO" }}
+              />
 
-            <Tab.Screen
-              name="Carrinho"
-              component={CartScreen}
-              options={{ headerTitle: "CARRINHO" }}
-            />
-          </Tab.Navigator>
-        </NavigationContainer>
-      </CartProvider>
-    </ControllOrderProvider>
+              <Tab.Screen
+                name="Carrinho"
+                component={CartScreen}
+                options={{ headerTitle: "CARRINHO" }}
+              />
+            </Tab.Navigator>
+          </NavigationContainer>
+        </CartProvider>
+      </ControllOrderProvider>
+    </DataProvider>
   );
 }
