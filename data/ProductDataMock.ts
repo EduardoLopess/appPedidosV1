@@ -471,7 +471,7 @@ export const ProductData = [
 ];
 
 export const FlavorData = [
-  { id: 1, name: "Morango", category: "Sabor", available: true },
+  { id: 1, name: "Morango", category: "Sabor", available: false },
   { id: 2, name: "Limão", category: "Sabor", available: true },
   { id: 3, name: "Abacaxi", category: "Sabor", available: true },
   { id: 4, name: "Morango", category: "Sabor", available: true },

@@ -1,16 +1,19 @@
-import { createContext, ReactNode, useContext, useState } from "react";
+import { createContext, ReactNode, useContext, useRef, useState } from "react";
 import { useControllOrder } from "./controllOrder";
 import { Cart, Flavor, Product } from "../utils/types/ProductType";
 import { Toast } from "toastify-react-native";
 import { useDataContext } from "./dataContext";
+import { useModal } from "../utils/hoocks/useModal";
 
 interface CartProps {
   cartItem: Cart[] | undefined;
   addItemCart: (itemId: number) => void;
+  addFlavorItemCart: (flavorId: number) => void;
   clearCart: () => void;
   removeItem: (idItem: number) => void;
   isOpenModalFlavor: boolean;
-  flavorTemporaryData: Flavor[] | undefined
+  setIsOpenModalFlavor: React.Dispatch<React.SetStateAction<boolean>>;
+  flavorTemporaryData: Flavor[] | undefined;
 }
 
 type StatusError =
@@ -27,11 +30,33 @@ type StatusError =
 const CartContext = createContext<CartProps | undefined>(undefined);
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
+  const [isOpenModalFlavor, setIsOpenModalFlavor] = useState(false);
   const [cartItem, setItemCart] = useState<Cart[]>([]); //STATE DE UI
-  const [flavorTemporaryData, setFlavorTemporaryData] = useState<Flavor[] | undefined>()
+  const [flavorTemporaryData, setFlavorTemporaryData] = useState<
+    Flavor[] | undefined
+  >();
+
+  //Guarda o produto com Addons/Sabor
+  const productTemporaryRef = useRef<Product | undefined>(undefined);
+  // const [productTemporary, setProductTemporary] = useState<undefined | Product>()
 
   const { setMensage } = useControllOrder(); //Context
-  const { products: productData, additions, flavor: flavorData } = useDataContext();
+
+  const {
+    products: productData,
+    additions: additionsData,
+    flavor: flavorData,
+  } = useDataContext();
+
+  const getProductErrorMessage = (error?: string) => {
+    const errorMap: Record<string, string> = {
+      INVALID_ID: "Id Produto invalido",
+      PRODUCT_NOT_FOUND: "Produto não encontrado.",
+      PRODUCT_UNAVAILABLE: "Produto indisponível",
+    };
+
+    return errorMap[error || ""] || "ERROR";
+  };
 
   const containsProduct = (id: number) => {
     const product = cartItem.find((item) => item.product.id === id);
@@ -41,23 +66,76 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     return true;
   };
 
-  const containsFlavor = (productItem: Product) => {
-    const checkFlavor = productItem.addons?.flavorIds ?? []
-    if(checkFlavor?.length > 0) {
-      const dataTemporary = flavorData.filter(item => checkFlavor.includes(item.id))
-      setFlavorTemporaryData(dataTemporary)
-      
-    }
-
-    return productItem
-  }
-
-  const addQtdProduct = (idItem: number) => {
-    const newQtd = cartItem.map((item) =>
-      item.product.id === idItem ? { ...item, qtd: item.qtd + 1 } : item,
+  const containsProductFlavor = (idProduct: number, idFlavor: number) => {
+    const contais = cartItem.find(
+      (item) => item.product.id === idProduct && item.flavor?.id === idFlavor,
     );
+    if (!contais) return false;
 
-    return newQtd;
+    return true;
+  };
+
+  const containsFlavor = (productItem: Product) => {
+    const checkFlavor = productItem.addons?.flavorIds ?? [];
+    if (checkFlavor.length > 0) {
+      return true;
+    }
+    return false;
+  };
+
+  //Cria DATA com sabores
+  const createDataTemporaryFlavor = (productItem: Product) => {
+    const checkFlavor = productItem.addons?.flavorIds ?? [];
+    if (checkFlavor?.length > 0) {
+      const dataTemporary = flavorData.filter((item) =>
+        checkFlavor.includes(item.id),
+      );
+      setFlavorTemporaryData(dataTemporary);
+      setIsOpenModalFlavor(true);
+      productTemporaryRef.current === productItem;
+    }
+  };
+
+  //ADD SABOR
+  const addFlavorItemCart = (flavorId: number) => {
+    const flavor = flavorData.find((item) => item.id === flavorId);
+    if (!flavor) return;
+    const product = productTemporaryRef.current;
+
+    if (product) {
+      const newQtdCheck = containsProductFlavor(product.id, flavor.id);
+      if (newQtdCheck) {
+        const newQtd = addQtdProduct(product.id, flavor.id);
+        setItemCart(newQtd);
+        return;
+      }
+
+      const newItem: Cart = { product: product, flavor: flavor, qtd: 1 };
+      setItemCart((prevCart) => [...prevCart, newItem]);
+      Toast.show({
+        type: "success",
+        text1: "Item adcionado",
+        autoHide: true,
+        visibilityTime: 1500,
+      });
+
+      productTemporaryRef.current = undefined;
+      setFlavorTemporaryData(undefined);
+    }
+  };
+
+  //ADD QTD
+  const addQtdProduct = (idProduct: number, idFlavor?: number) => {
+    return cartItem.map((item) => {
+      const sameProduct = item.product.id === idProduct;
+
+      const sameFlavor =
+        idFlavor !== undefined
+          ? item.flavor?.id === idFlavor
+          : item.flavor === undefined;
+
+      return sameProduct && sameFlavor ? { ...item, qtd: item.qtd + 1 } : item;
+    });
   };
 
   //busca item
@@ -74,25 +152,24 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     return { ok: true, product: productItem };
   };
 
+  //ADD ITEM = FUNCAO PRINCIPAL
   const addItemCart = (itemId: number) => {
     const productResult = searchItem(itemId);
 
     //VALIDACAO
     if (!productResult.ok) {
-      const errorMap: Record<string, string> = {
-        INVALID_ID: "Id Produto invalido",
-        PRODUCT_NOT_FOUND: "Produto não encontado.",
-        PRODUCT_UNAVAILABLE: "Produto indisponível",
-      };
-
-      setMensage(errorMap[productResult.error!] || "ERROR");
+      const message = getProductErrorMessage(productResult.error);
+      setMensage(message);
       return { ok: false, error: "ERROR" };
     }
 
     //VERIICAR SE TEM SABOR
-    const flavorCheck = containsFlavor(productResult.product)
+    const flavorCheck = containsFlavor(productResult.product);
 
-
+    if (flavorCheck) {
+      createDataTemporaryFlavor(productResult.product);
+      return;
+    }
 
     //FUNCAO QUE VERIFICA SE O PRODUTO JA ESTA NO CARRINHO TRUE/FALSE
     const contains = containsProduct(productResult.product.id);
@@ -134,8 +211,10 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         cartItem,
         clearCart,
         removeItem,
-        isOpenModalFlavor: true,
-        flavorTemporaryData
+        isOpenModalFlavor,
+        flavorTemporaryData,
+        setIsOpenModalFlavor,
+        addFlavorItemCart,
       }}
     >
       {children}

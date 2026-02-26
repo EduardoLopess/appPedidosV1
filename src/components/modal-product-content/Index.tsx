@@ -94,7 +94,7 @@ export const ModalProductsContent = ({
         </TouchableOpacity>
       </View>
 
-      <ModalFlavor isVisible={isVisibleFlave} closeModal={closeModalFlave} />
+      <ModalFlavor  />
     </Modal>
   );
 };
