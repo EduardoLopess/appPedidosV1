@@ -36,13 +36,18 @@ export const ModalProductsContent = ({
   } = useModal();
 
   const { orderStarted } = useControllOrder();
-  const { addItemCart, isOpenModalFlavor } = useCart();
+  const { addItemCart, isOpenModalFlavor, clearFlavorTemporaryData } = useCart();
 
   useEffect(() => {
     if (isOpenModalFlavor) {
       openModalFlave();
     }
   }, [isOpenModalFlavor]);
+
+  const actions = () => {
+    closeModal(),
+    clearFlavorTemporaryData()
+  }
 
   return (
     <Modal
@@ -89,7 +94,9 @@ export const ModalProductsContent = ({
         />
       </View>
       <View style={style.containerBtn}>
-        <TouchableOpacity style={style.btn} onPress={closeModal}>
+        <TouchableOpacity style={style.btn} onPress={actions}>
+      
+ 
           <Text style={style.txtBtn}>FECHAR</Text>
         </TouchableOpacity>
       </View>

@@ -7,6 +7,7 @@ import { useModal } from "../utils/hoocks/useModal";
 
 interface CartProps {
   cartItem: Cart[] | undefined;
+  clearFlavorTemporaryData: () => void
   addItemCart: (itemId: number) => void;
   addFlavorItemCart: (flavorId: number) => void;
   clearCart: () => void;
@@ -58,6 +59,10 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     return errorMap[error || ""] || "ERROR";
   };
 
+  const clearFlavorTemporaryData = () => setFlavorTemporaryData(undefined);
+
+  
+
   const containsProduct = (id: number) => {
     const product = cartItem.find((item) => item.product.id === id);
 
@@ -92,7 +97,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       );
       setFlavorTemporaryData(dataTemporary);
       setIsOpenModalFlavor(true);
-      productTemporaryRef.current === productItem;
+      productTemporaryRef.current = productItem;
     }
   };
 
@@ -107,6 +112,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       if (newQtdCheck) {
         const newQtd = addQtdProduct(product.id, flavor.id);
         setItemCart(newQtd);
+        Toast.show({
+          type: "success",
+          text1: "Item adcionado",
+          autoHide: true,
+          visibilityTime: 1500,
+        });
         return;
       }
 
@@ -120,7 +131,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       });
 
       productTemporaryRef.current = undefined;
-      setFlavorTemporaryData(undefined);
+      
     }
   };
 
@@ -215,6 +226,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         flavorTemporaryData,
         setIsOpenModalFlavor,
         addFlavorItemCart,
+        clearFlavorTemporaryData
       }}
     >
       {children}
