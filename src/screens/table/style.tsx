@@ -7,6 +7,7 @@ export default StyleSheet.create({
     paddingTop: 10,
     paddingLeft: 10,
     paddingRight: 10,
+     backgroundColor: "white",
   },
 
   containerTable: {

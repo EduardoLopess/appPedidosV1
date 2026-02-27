@@ -4,6 +4,8 @@ import { useOrder } from "../../hooks/useOrder";
 import style from "./style";
 import { useControllOrder } from "../../context/controllOrder";
 import { useCart } from "../../context/cartContext";
+import { ProductItem } from "./components/productItem/Index";
+import { FlavorItem } from "./components/flavorItem/Index";
 
 export const CartScreen = () => {
   const { finishOrder, cancelOrder } = useOrder();
@@ -15,7 +17,14 @@ export const CartScreen = () => {
 
   return (
     <View style={style.container}>
-      <View style={style.containerContent}></View>
+      <View style={style.containerContent}>
+
+        <ProductItem>
+          <FlavorItem/>
+        </ProductItem>
+
+
+      </View>
 
       <View style={style.containerTotal}>
         <Text style={style.TxtTotal}>TOTAL: R$: 999,99</Text>

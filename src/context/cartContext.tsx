@@ -59,9 +59,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     return errorMap[error || ""] || "ERROR";
   };
 
-  const clearFlavorTemporaryData = () => setFlavorTemporaryData(undefined);
+  const clearFlavorTemporaryData = () => {
+    setFlavorTemporaryData(undefined);
+    productTemporaryRef.current = undefined;
+  }
 
-  
+   
 
   const containsProduct = (id: number) => {
     const product = cartItem.find((item) => item.product.id === id);
@@ -130,13 +133,14 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         visibilityTime: 1500,
       });
 
-      productTemporaryRef.current = undefined;
+     
       
     }
   };
 
   //ADD QTD
   const addQtdProduct = (idProduct: number, idFlavor?: number) => {
+    
     return cartItem.map((item) => {
       const sameProduct = item.product.id === idProduct;
 

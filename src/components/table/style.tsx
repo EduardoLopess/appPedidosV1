@@ -8,7 +8,8 @@ export default StyleSheet.create({
     height: 150,
     elevation: 10,
     flexDirection: "column",
-    position: 'relative'
+    position: 'relative',
+    
   },
 
   containerNumber: {
