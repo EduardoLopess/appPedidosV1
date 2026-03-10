@@ -15,28 +15,45 @@ export const useOrder = () => {
 
   const navigation = useNavigation<NavigationProp<StackParamList>>();
 
-  const start = (id: number) => {
-    const result = startOrder(id);
 
-    if(result.status === 'already_exists') {
-      navigation.navigate("Cardapio");
-      return
-    }
 
-    if (result.status === 'created') {
-      navigation.navigate("Cardapio");
+const start = (id: number) => {
+  Alert.alert(
+    "Iniciar pedido",
+    "Deseja realmente iniciar esse pedido?",
+    [
+      {
+        text: "Cancelar",
+        style: "cancel",
+      },
+      {
+        text: "Confirmar",
+        onPress: () => {
+          const result = startOrder(id);
 
-      Toast.show({
-        type: "success",
-        text1: "PEDIDO INICIADO",
-        autoHide: true,
-        visibilityTime: 1500,
-      });
+          if (result.status === "already_exists") {
+            navigation.navigate("Cardapio");
+            return;
+          }
 
-      return;
-    }
-  };
+          if (result.status === "created") {
+            navigation.navigate("Cardapio");
 
+            Toast.show({
+              type: "success",
+              text1: "PEDIDO INICIADO",
+              autoHide: true,
+              visibilityTime: 1500,
+            });
+
+            return;
+          }
+        },
+      },
+    ],
+    { cancelable: true }
+  );
+};
   const finishOrder = () => {};
 
   const editOrder = () => {
