@@ -6,10 +6,11 @@ import { useControllOrder } from "../../context/controllOrder";
 import { useCart } from "../../context/cartContext";
 import { Item } from "./components/item/Index";
 import { ItemFlavor } from "./components/item-flavor/Index";
+import { ItemAdditional } from "./components/item-additional/Index";
 
 export const CartScreen = () => {
   const { finishOrder, cancelOrder } = useOrder();
-  const { cartItem } = useCart();
+  const { cartItem, alterQtdItemCart } = useCart();
   const { orderTableNumber } = useControllOrder();
   //if (!cartItem || cartItem.length === 0) return null;
   console.log(JSON.stringify(cartItem, null, 2));
@@ -18,45 +19,17 @@ export const CartScreen = () => {
   return (
     <View style={style.container}>
       <View style={style.containerContent}>
-       <ScrollView>
-         <Item>
-          <ItemFlavor/>
-            
-        </Item>
+        <ScrollView>
+          <Item>
+            <ItemAdditional/>
+          </Item>
 
-        <Item>
-          <ItemFlavor/>
-            
-        </Item>
-        <Item>
-          <ItemFlavor/>
-            
-        </Item>
+           <Item>
+            <ItemFlavor/>
+          </Item>
 
-        <Item>
-          <ItemFlavor/>
-            
-        </Item>
-        <Item>
-          <ItemFlavor/>
-            
-        </Item>
-
-        <Item>
-          <ItemFlavor/>
-            
-        </Item>
-        <Item>
-          <ItemFlavor/>
-            
-        </Item>
-
-        <Item>
-          <ItemFlavor/>
-            
-        </Item>
-
-       </ScrollView>
+          <Item/>
+        </ScrollView>
       </View>
 
       <View style={style.containerTotal}>

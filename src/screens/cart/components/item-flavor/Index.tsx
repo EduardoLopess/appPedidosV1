@@ -5,7 +5,7 @@ export const ItemFlavor = () => {
 
     return (
         <View style={style.container}>
-            <Text style={style.txt}>Sabor: + Morango</Text>
+            <Text>Sabor:  Morango</Text>
         </View>
     )
 }

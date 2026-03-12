@@ -1,20 +1,22 @@
 import { createContext, ReactNode, useContext, useRef, useState } from "react";
 import { useControllOrder } from "./controllOrder";
-import { Cart, Flavor, Product } from "../utils/types/ProductType";
+import { Aditional, Cart, Flavor, Product } from "../utils/types/ProductType";
 import { Toast } from "toastify-react-native";
 import { useDataContext } from "./dataContext";
 import { useModal } from "../utils/hoocks/useModal";
 
 interface CartProps {
   cartItem: Cart[] | undefined;
-  clearFlavorTemporaryData: () => void
+  clearFlavorTemporaryData: () => void;
   addItemCart: (itemId: number) => void;
   addFlavorItemCart: (flavorId: number) => void;
   clearCart: () => void;
   removeItem: (idItem: number) => void;
+  alterQtdItemCart: (idItemCart: number) => void;
   isOpenModalFlavor: boolean;
   setIsOpenModalFlavor: React.Dispatch<React.SetStateAction<boolean>>;
   flavorTemporaryData: Flavor[] | undefined;
+  adcTemporaryData: Aditional[] | undefined
 }
 
 type StatusError =
@@ -33,9 +35,8 @@ const CartContext = createContext<CartProps | undefined>(undefined);
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [isOpenModalFlavor, setIsOpenModalFlavor] = useState(false);
   const [cartItem, setItemCart] = useState<Cart[]>([]); //STATE DE UI
-  const [flavorTemporaryData, setFlavorTemporaryData] = useState<
-    Flavor[] | undefined
-  >();
+  const [flavorTemporaryData, setFlavorTemporaryData] = useState<Flavor[] | undefined>();
+  const [adcTemporaryData, setAdcTemporaryData] = useState<Aditional[] | undefined> ()
 
   //Guarda o produto com Addons/Sabor
   const productTemporaryRef = useRef<Product | undefined>(undefined);
@@ -62,9 +63,15 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const clearFlavorTemporaryData = () => {
     setFlavorTemporaryData(undefined);
     productTemporaryRef.current = undefined;
-  }
+  };
 
-   
+  const alterQtdItemCart = (IdItemCart: number) => {
+    setItemCart((prevCart) =>
+      prevCart.map((item) =>
+        item.product.id === IdItemCart ? { ...item, qtd: item.qtd + 1 } : item,
+      ),
+    );
+  };
 
   const containsProduct = (id: number) => {
     const product = cartItem.find((item) => item.product.id === id);
@@ -83,6 +90,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     return true;
   };
 
+  //verifica sem o item tem array de sabor usado para o drink do tipo caipirinha
   const containsFlavor = (productItem: Product) => {
     const checkFlavor = productItem.addons?.flavorIds ?? [];
     if (checkFlavor.length > 0) {
@@ -90,6 +98,16 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     }
     return false;
   };
+
+  //verifica se tem adc dispoinivel para o item 
+  const containsAdditional = (productItem: Product) => {
+    const checkAdc = productItem.addons?.aditionsIds ?? []
+    if (checkAdc.length > 0) {
+      return true
+    }
+    return false
+
+  }
 
   //Cria DATA com sabores
   const createDataTemporaryFlavor = (productItem: Product) => {
@@ -103,6 +121,18 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       productTemporaryRef.current = productItem;
     }
   };
+
+  //Cria Data com os adc
+  const createDataTemporaryAdc = (productItem: Product) => {
+    const checkAdc = productItem.addons?.aditionsIds ?? []
+    if (checkAdc.length > 0) {
+      const dataTeporary = additionsData.filter((item) => 
+        checkAdc.includes(item.id)
+      )
+      setAdcTemporaryData(dataTeporary)
+    }
+
+  }
 
   //ADD SABOR
   const addFlavorItemCart = (flavorId: number) => {
@@ -132,15 +162,11 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         autoHide: true,
         visibilityTime: 1500,
       });
-
-     
-      
     }
   };
 
   //ADD QTD
   const addQtdProduct = (idProduct: number, idFlavor?: number) => {
-    
     return cartItem.map((item) => {
       const sameProduct = item.product.id === idProduct;
 
@@ -178,9 +204,15 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       return { ok: false, error: "ERROR" };
     }
 
-    //VERIICAR SE TEM SABOR
-    const flavorCheck = containsFlavor(productResult.product);
+    //Verifica se tem ADC no produto
+    //const checkAdc = containsAdditional(productResult.product)
+    //if (checkAdc) {
+    //  createDataTemporaryAdc(productResult.product)
+    //  return
+   // }
 
+    //Verifica se tem sabor no produto
+    const flavorCheck = containsFlavor(productResult.product);
     if (flavorCheck) {
       createDataTemporaryFlavor(productResult.product);
       return;
@@ -230,7 +262,9 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         flavorTemporaryData,
         setIsOpenModalFlavor,
         addFlavorItemCart,
-        clearFlavorTemporaryData
+        clearFlavorTemporaryData,
+        alterQtdItemCart,
+        adcTemporaryData
       }}
     >
       {children}

@@ -13,8 +13,7 @@ export default StyleSheet.create({
   containerTotal: {
     height: 100,
     width: "100%",
-    borderTopWidth: 1,
-    borderColor: "#C1C2C1",
+ 
     justifyContent: "center",
     alignItems: "center",
   },

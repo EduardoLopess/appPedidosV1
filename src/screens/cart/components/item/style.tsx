@@ -11,7 +11,8 @@ export default StyleSheet.create({
     width: "100%",
     minHeight: 60,
     borderTopWidth: 1,
-    borderColor: '#C1C2C1'
+    borderColor: '#C1C2C1',
+    borderBottomWidth: 1
   },
 
   txt: {

@@ -13,7 +13,5 @@ export default StyleSheet.create({
     borderColor: "#C1C2C1",
   },
 
-  txt: {
-    fontSize: 18,
-  },
+ 
 });
