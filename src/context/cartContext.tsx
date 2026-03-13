@@ -40,7 +40,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   //Guarda o produto com Addons/Sabor
   const productTemporaryRef = useRef<Product | undefined>(undefined);
-  // const [productTemporary, setProductTemporary] = useState<undefined | Product>()
+
 
   const { setMensage } = useControllOrder(); //Context
 

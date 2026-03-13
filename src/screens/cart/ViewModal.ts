@@ -1,4 +1,5 @@
 import { useCart } from "../../context/cartContext"
+import { Cart } from "../../utils/types/ProductType"
 
 
 interface CartProps  {
@@ -13,7 +14,12 @@ interface CartProps  {
 
 
 export const useViewModel = () => {
-    const {} = useCart()
+    const {cartItem} = useCart()
+
+
+    const checkTipeProductCart = (cartItem: Cart) => {
+        
+    }
 
     
 }

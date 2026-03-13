@@ -3,56 +3,49 @@ import { StyleSheet } from "react-native";
 export default StyleSheet.create({
   container: {
     width: "100%",
+    height: 40,
     backgroundColor: "#F0F0F0",
+    flexDirection: "row",
     borderBottomWidth: 1,
     borderColor: "#C1C2C1",
   },
 
-  btn: {
-    height: 40,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 5,
-    marginBottom: 5,
-  },
-
-  containerItem: {
-    width: "100%",
-    height: 40,
-    backgroundColor: "#F0F0F0",
-    flexDirection: "row",
-    borderTopWidth: 1,
-    borderColor: "#C1C2C1",
-
-    paddingStart: 10,
-  },
-
   containerName: {
-    justifyContent: "center",
-    flex: 2,
+    flex: 1.5,
     borderRightWidth: 1,
+    justifyContent: "center",
+    paddingStart: 10,
     borderColor: "#C1C2C1",
   },
 
   containerPrice: {
-    justifyContent: "center",
-    paddingStart: 10,
     flex: 1,
     borderRightWidth: 1,
+    justifyContent: "center",
+    paddingStart: 10,
+    borderColor: "#C1C2C1",
+  },
+
+  containerQtd: {
+    flex: 0.5,
+    borderRightWidth: 1,
+    justifyContent: "center",
+    alignItems: "center",
     borderColor: "#C1C2C1",
   },
 
   containerBtn: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: "center",
+    alignItems: "center",
+    borderColor: "#C1C2C1",
   },
 
-  btnAdd: {
-    backgroundColor: 'green',
-    height: 30,
+  btn: {
     width: 50,
-    alignItems: 'center',
-    justifyContent: 'center'
-  }
+    height: 30,
+    backgroundColor: "red",
+    alignItems: "center",
+    justifyContent: "center",
+  },
 });
