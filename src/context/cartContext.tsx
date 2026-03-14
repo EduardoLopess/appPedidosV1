@@ -4,6 +4,7 @@ import { Aditional, Cart, Flavor, Product } from "../utils/types/ProductType";
 import { Toast } from "toastify-react-native";
 import { useDataContext } from "./dataContext";
 import { useModal } from "../utils/hoocks/useModal";
+import { nanoid } from "nanoid/non-secure";
 
 interface CartProps {
   cartItem: Cart[] | undefined;
@@ -11,12 +12,15 @@ interface CartProps {
   addItemCart: (itemId: number) => void;
   addFlavorItemCart: (flavorId: number) => void;
   clearCart: () => void;
-  removeItem: (idItem: number) => void;
-  alterQtdItemCart: (idItemCart: number) => void;
+  removeItem: (idItem: string) => void;
+  alterQtdItemCart: (idItemCart: string) => void;
   isOpenModalFlavor: boolean;
   setIsOpenModalFlavor: React.Dispatch<React.SetStateAction<boolean>>;
   flavorTemporaryData: Flavor[] | undefined;
-  adcTemporaryData: Aditional[] | undefined
+  adcTemporaryData: Aditional[] | undefined;
+  containsAdditional: (productItem: Product) => boolean,
+  addAdditionsItemCart: (idAdc: number, uiidProduct: string) => void
+
 }
 
 type StatusError =
@@ -35,12 +39,15 @@ const CartContext = createContext<CartProps | undefined>(undefined);
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [isOpenModalFlavor, setIsOpenModalFlavor] = useState(false);
   const [cartItem, setItemCart] = useState<Cart[]>([]); //STATE DE UI
-  const [flavorTemporaryData, setFlavorTemporaryData] = useState<Flavor[] | undefined>();
-  const [adcTemporaryData, setAdcTemporaryData] = useState<Aditional[] | undefined> ()
+  const [flavorTemporaryData, setFlavorTemporaryData] = useState<
+    Flavor[] | undefined
+  >();
+  const [adcTemporaryData, setAdcTemporaryData] = useState<
+    Aditional[] | undefined
+  >();
 
   //Guarda o produto com Addons/Sabor
   const productTemporaryRef = useRef<Product | undefined>(undefined);
-
 
   const { setMensage } = useControllOrder(); //Context
 
@@ -65,12 +72,33 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     productTemporaryRef.current = undefined;
   };
 
-  const alterQtdItemCart = (IdItemCart: number) => {
+  const alterQtdItemCart = (IdItemCart: string) => {
     setItemCart((prevCart) =>
       prevCart.map((item) =>
-        item.product.id === IdItemCart ? { ...item, qtd: item.qtd + 1 } : item,
+        item.nanoId === IdItemCart ? { ...item, qtd: item.qtd + 1 } : item,
       ),
     );
+  };
+
+  //remover item
+  const removeItem = (idItemCart: string) => {
+    const item = cartItem.find((item) => item.nanoId === idItemCart);
+    if (item) {
+      if (item.qtd > 1) {
+        setItemCart((prevCart) =>
+          prevCart.map((item) =>
+            item.nanoId === idItemCart
+              ? { ...item, qtd: item.qtd - 1 }
+              : item,
+          ),
+        );
+        return;
+      }
+
+      setItemCart((prevCart) =>
+        prevCart.filter((item) => item.nanoId !== idItemCart),
+      );
+    }
   };
 
   const containsProduct = (id: number) => {
@@ -99,15 +127,14 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     return false;
   };
 
-  //verifica se tem adc dispoinivel para o item 
+  //verifica se tem adc dispoinivel para o item
   const containsAdditional = (productItem: Product) => {
-    const checkAdc = productItem.addons?.aditionsIds ?? []
+    const checkAdc = productItem.addons?.additionsIds ?? [];
     if (checkAdc.length > 0) {
-      return true
+      return true;
     }
-    return false
-
-  }
+    return false;
+  };
 
   //Cria DATA com sabores
   const createDataTemporaryFlavor = (productItem: Product) => {
@@ -124,15 +151,38 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   //Cria Data com os adc
   const createDataTemporaryAdc = (productItem: Product) => {
-    const checkAdc = productItem.addons?.aditionsIds ?? []
+    const checkAdc = productItem.addons?.additionsIds ?? [];
     if (checkAdc.length > 0) {
-      const dataTeporary = additionsData.filter((item) => 
-        checkAdc.includes(item.id)
-      )
-      setAdcTemporaryData(dataTeporary)
+      const dataTeporary = additionsData.filter((item) =>
+        checkAdc.includes(item.id),
+      );
+      console.log('DATA FUNCAO CRIA => ', dataTeporary)
+      setAdcTemporaryData(dataTeporary);
     }
+  };
 
-  }
+  //ADC ao ITEM
+const addAdditionsItemCart = (idAdc: number, uiidProduct: string) => {
+  // 1. Acha o adicional nos dados mestre
+  const adcItem = additionsData.find(item => item.id === idAdc);
+  if (!adcItem) return;
+
+  // 2. Atualiza o carrinho procurando pelo nanoId (uiidProduct)
+  setItemCart((prevCart) =>
+    prevCart.map((item) => {
+      if (item.nanoId === uiidProduct) {
+      
+        return {
+          ...item,
+          adc: item.adc 
+            ? [...item.adc, { ...adcItem, qtd: 1 }] 
+            : [{ ...adcItem, qtd: 1 }]          
+        };
+      }
+      return item;
+    })
+  );
+};
 
   //ADD SABOR
   const addFlavorItemCart = (flavorId: number) => {
@@ -154,7 +204,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         return;
       }
 
-      const newItem: Cart = { product: product, flavor: flavor, qtd: 1 };
+      const newItem: Cart = {
+        nanoId: nanoid(),
+        product: product,
+        flavor: flavor,
+        qtd: 1,
+      };
       setItemCart((prevCart) => [...prevCart, newItem]);
       Toast.show({
         type: "success",
@@ -205,11 +260,11 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     }
 
     //Verifica se tem ADC no produto
-    //const checkAdc = containsAdditional(productResult.product)
-    //if (checkAdc) {
-    //  createDataTemporaryAdc(productResult.product)
-    //  return
-   // }
+    const checkAdc = containsAdditional(productResult.product)
+    if (checkAdc) {
+      createDataTemporaryAdc(productResult.product)
+     
+     }
 
     //Verifica se tem sabor no produto
     const flavorCheck = containsFlavor(productResult.product);
@@ -234,7 +289,11 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       return;
     }
 
-    const itemNew: Cart = { product: productResult.product, qtd: 1 };
+    const itemNew: Cart = {
+      nanoId: nanoid(),
+      product: productResult.product,
+      qtd: 1,
+    };
 
     setItemCart((prevCart) => [...prevCart, itemNew]);
     Toast.show({
@@ -245,8 +304,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
-  const removeItem = (idItem: number) => {};
-
   const clearCart = () => {
     setItemCart([]);
   };
@@ -255,6 +312,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     <CartContext.Provider
       value={{
         addItemCart,
+        addAdditionsItemCart,
         cartItem,
         clearCart,
         removeItem,
@@ -264,7 +322,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         addFlavorItemCart,
         clearFlavorTemporaryData,
         alterQtdItemCart,
-        adcTemporaryData
+        adcTemporaryData,
+        containsAdditional
       }}
     >
       {children}

@@ -7,7 +7,7 @@ export interface Product {
   available: boolean;
   addons?: {
     flavorIds?: number[];
-    aditionsIds?: number[];
+    additionsIds?: number[];
   };
 }
 
@@ -28,9 +28,11 @@ export interface Aditional {
   name: string;
   price: number;
   available: boolean;
+  qtd: number
 }
 
 export interface Cart {
+  nanoId: string;
   product: Product;
   qtd: number;
   adc?: Aditional[];

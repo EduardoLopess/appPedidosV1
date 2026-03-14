@@ -11,30 +11,30 @@ import { AdditionalItem } from "./components/item-additional/Index";
 
 export const CartScreen = () => {
   const { finishOrder, cancelOrder } = useOrder();
-  const { cartItem, alterQtdItemCart } = useCart();
+  const { cartItem, adcTemporaryData } = useCart();
   const { orderTableNumber } = useControllOrder();
   //if (!cartItem || cartItem.length === 0) return null;
+  console.log(cartItem)
+  console.log('adc data temp => ', adcTemporaryData)
 
   return (
     <View style={style.container}>
       <View style={style.containerContent}>
         <ScrollView>
-          <Item>
-            <AdditionalList />
-          </Item>
+          {cartItem && cartItem.length > 0 ?(
+            console.log(JSON.stringify(cartItem, null, 2)),
+            cartItem.map((item) => (
+              <Item key={item.nanoId} item={item}>
+                {item.adc && <AdditionalItem item={item.adc}/>}
 
-          <Item>
-            <AdditionalItem />
-            <AdditionalItem />
-            <AdditionalItem />
-            <AdditionalItem />
-          </Item>
+                {item.flavor && <ItemFlavor item={item.flavor} />}
 
-          <Item>
-            <ItemFlavor />
-          </Item>
-
-          <Item />
+                {adcTemporaryData && <AdditionalList adcTemporaryData={adcTemporaryData} itemId={item.nanoId} />}
+              </Item>
+            ))
+          ) : (
+            <Text>Carrinho vazio</Text>
+          )}
         </ScrollView>
       </View>
 
