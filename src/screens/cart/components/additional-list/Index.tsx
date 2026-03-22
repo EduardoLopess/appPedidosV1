@@ -1,7 +1,7 @@
 import { Text, TouchableOpacity, View } from "react-native";
 import style from "./style";
 import { useState } from "react";
-import { useCart } from "../../../../context/cartContext";
+import { useCart } from "../../../../context/cart/cartContext";
 import { formatPrice } from "../../../../utils/format/formatPrice";
 import { Aditional } from "../../../../utils/types/ProductType";
 

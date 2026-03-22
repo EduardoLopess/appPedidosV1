@@ -13,6 +13,7 @@
     "@react-navigation/bottom-tabs": "^7.8.11",
     "@react-navigation/native": "^7.1.24",
     "expo": "~54.0.26",
+    "expo-blur": "~15.0.8",
     "expo-navigation-bar": "~5.0.9",
     "expo-status-bar": "~3.0.8",
     "nanoid": "^5.1.6",

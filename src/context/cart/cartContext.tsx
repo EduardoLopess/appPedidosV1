@@ -1,9 +1,14 @@
 import { createContext, ReactNode, useContext, useRef, useState } from "react";
-import { useControllOrder } from "./controllOrder";
-import { Aditional, Cart, Flavor, Product } from "../utils/types/ProductType";
+import { useControllOrder } from "../controllOrder";
+import {
+  Aditional,
+  Cart,
+  Flavor,
+  Product,
+} from "../../utils/types/ProductType";
 import { Toast } from "toastify-react-native";
-import { useDataContext } from "./dataContext";
-import { useModal } from "../utils/hoocks/useModal";
+import { useDataContext } from "../dataContext";
+import { useModal } from "../../utils/hoocks/useModal";
 import { nanoid } from "nanoid/non-secure";
 
 interface CartProps {
@@ -13,14 +18,14 @@ interface CartProps {
   addFlavorItemCart: (flavorId: number) => void;
   clearCart: () => void;
   removeItem: (idItem: string) => void;
+  removeAdc: (adcIdCart: string, idItemCart: string) => void;
   alterQtdItemCart: (idItemCart: string) => void;
   isOpenModalFlavor: boolean;
   setIsOpenModalFlavor: React.Dispatch<React.SetStateAction<boolean>>;
   flavorTemporaryData: Flavor[] | undefined;
   adcTemporaryData: Aditional[] | undefined;
-  containsAdditional: (productItem: Product) => boolean,
-  addAdditionsItemCart: (idAdc: number, uiidProduct: string) => void
-
+  containsAdditional: (productItem: Product) => boolean;
+  addAdditionsItemCart: (idAdc: number, uiidProduct: string) => void;
 }
 
 type StatusError =
@@ -87,9 +92,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       if (item.qtd > 1) {
         setItemCart((prevCart) =>
           prevCart.map((item) =>
-            item.nanoId === idItemCart
-              ? { ...item, qtd: item.qtd - 1 }
-              : item,
+            item.nanoId === idItemCart ? { ...item, qtd: item.qtd - 1 } : item,
           ),
         );
         return;
@@ -99,6 +102,20 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         prevCart.filter((item) => item.nanoId !== idItemCart),
       );
     }
+  };
+
+  const removeAdc = (adcIdCart: string, idItemCart: string) => {
+    setItemCart((prevCart) =>
+      prevCart.map((item) => {
+        if (item.nanoId === idItemCart) {
+          return {
+            ...item,
+            adc: item.adc?.filter((adc) => adc.nanoId !== adcIdCart),
+          };
+        }
+        return item;
+      }),
+    );
   };
 
   const containsProduct = (id: number) => {
@@ -156,33 +173,33 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       const dataTeporary = additionsData.filter((item) =>
         checkAdc.includes(item.id),
       );
-      console.log('DATA FUNCAO CRIA => ', dataTeporary)
+      console.log("DATA FUNCAO CRIA => ", dataTeporary);
       setAdcTemporaryData(dataTeporary);
     }
   };
 
   //ADC ao ITEM
-const addAdditionsItemCart = (idAdc: number, uiidProduct: string) => {
-  // 1. Acha o adicional nos dados mestre
-  const adcItem = additionsData.find(item => item.id === idAdc);
-  if (!adcItem) return;
+  const addAdditionsItemCart = (idAdc: number, uiidProduct: string) => {
+    // 1. Acha o adicional nos dados mestre
+    const adcItem = additionsData.find((item) => item.id === idAdc);
+    if (!adcItem) return;
 
-  // 2. Atualiza o carrinho procurando pelo nanoId (uiidProduct)
-  setItemCart((prevCart) =>
-    prevCart.map((item) => {
-      if (item.nanoId === uiidProduct) {
-      
-        return {
-          ...item,
-          adc: item.adc 
-            ? [...item.adc, { ...adcItem, qtd: 1 }] 
-            : [{ ...adcItem, qtd: 1 }]          
-        };
-      }
-      return item;
-    })
-  );
-};
+    // 2. Atualiza o carrinho procurando pelo nanoId (uiidProduct)
+    setItemCart((prevCart) =>
+      prevCart.map((item) => {
+        if (item.nanoId === uiidProduct) {
+          return {
+            ...item,
+            adc: item.adc
+              ? [...item.adc, { ...adcItem, qtd: 1, nanoId: nanoid() }]
+              : [{ ...adcItem, qtd: 1, nanoId: nanoid() }],
+          };
+        }
+
+        return item;
+      }),
+    );
+  };
 
   //ADD SABOR
   const addFlavorItemCart = (flavorId: number) => {
@@ -260,11 +277,10 @@ const addAdditionsItemCart = (idAdc: number, uiidProduct: string) => {
     }
 
     //Verifica se tem ADC no produto
-    const checkAdc = containsAdditional(productResult.product)
+    const checkAdc = containsAdditional(productResult.product);
     if (checkAdc) {
-      createDataTemporaryAdc(productResult.product)
-     
-     }
+      createDataTemporaryAdc(productResult.product);
+    }
 
     //Verifica se tem sabor no produto
     const flavorCheck = containsFlavor(productResult.product);
@@ -315,6 +331,7 @@ const addAdditionsItemCart = (idAdc: number, uiidProduct: string) => {
         addAdditionsItemCart,
         cartItem,
         clearCart,
+        removeAdc,
         removeItem,
         isOpenModalFlavor,
         flavorTemporaryData,
@@ -323,7 +340,7 @@ const addAdditionsItemCart = (idAdc: number, uiidProduct: string) => {
         clearFlavorTemporaryData,
         alterQtdItemCart,
         adcTemporaryData,
-        containsAdditional
+        containsAdditional,
       }}
     >
       {children}

@@ -5,7 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useOrderFlow } from "../../context/orderFlow";
 import { useControllOrder } from "../../context/controllOrder";
 import { Product } from "../../utils/types/ProductType";
-import { useCart } from "../../context/cartContext";
+import { useCart } from "../../context/cart/cartContext";
 import { ModalFlavor } from "../modal-flavorDrink/Index";
 import { useEffect } from "react";
 import { useModal } from "../../utils/hoocks/useModal";

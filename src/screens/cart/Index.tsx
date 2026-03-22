@@ -3,7 +3,7 @@ import { TouchableOpacity } from "react-native";
 import { useOrder } from "../../hooks/useOrder";
 import style from "./style";
 import { useControllOrder } from "../../context/controllOrder";
-import { useCart } from "../../context/cartContext";
+import { useCart } from "../../context/cart/cartContext";
 import { Item } from "./components/item/Index";
 import { ItemFlavor } from "./components/item-flavor/Index";
 import { AdditionalList } from "./components/additional-list/Index";
@@ -24,12 +24,16 @@ export const CartScreen = () => {
           {cartItem && cartItem.length > 0 ?(
             console.log(JSON.stringify(cartItem, null, 2)),
             cartItem.map((item) => (
+              console.log('ITEM => ', item),
               <Item key={item.nanoId} item={item}>
-                {item.adc && <AdditionalItem item={item.adc}/>}
+                {item.adc && <AdditionalItem item={item.adc} nanoIdProduct={item.nanoId} />}
 
                 {item.flavor && <ItemFlavor item={item.flavor} />}
+               
 
-                {adcTemporaryData && <AdditionalList adcTemporaryData={adcTemporaryData} itemId={item.nanoId} />}
+                {adcTemporaryData && item.product.addons?.additionsIds?.length && 
+                  <AdditionalList adcTemporaryData={adcTemporaryData} itemId={item.nanoId} />
+                }
               </Item>
             ))
           ) : (

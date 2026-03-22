@@ -13,7 +13,7 @@ import { TableIdentificationDialog } from "./src/components/dialog/Index";
 import { ControllOrderProvider } from "./src/context/controllOrder";
 import { Mensage } from "./src/components/mensage/Index";
 import ToastManager from "toastify-react-native";
-import { CartProvider } from "./src/context/cartContext";
+import { CartProvider } from "./src/context/cart/cartContext";
 import { DataProvider } from "./src/context/dataContext";
 
 export type RootTabParamList = {

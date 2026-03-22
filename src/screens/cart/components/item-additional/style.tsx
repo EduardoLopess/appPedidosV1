@@ -12,8 +12,9 @@ export default StyleSheet.create({
 
   containerName: {
     flex: 1.5,
-    borderRightWidth: 1,
+    
     justifyContent: "center",
+    alignItems: 'center',
     paddingStart: 10,
     borderColor: "#C1C2C1",
   },

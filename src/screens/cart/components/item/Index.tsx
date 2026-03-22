@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import style from "./style";
 import { ReactNode } from "react";
 import { Cart } from "../../../../utils/types/ProductType";
-import { useCart } from "../../../../context/cartContext";
+import { useCart } from "../../../../context/cart/cartContext";
 import { formatPrice } from "../../../../utils/format/formatPrice";
 
 
@@ -20,7 +20,7 @@ export const Item = ({ children, item }: Props) => {
     <View style={style.container}>
       <View style={style.containerItem}>
         <View style={style.containerName}>
-          <Text style={style.txt}>{item.product.name}</Text>
+          <Text style={style.txt}>{item.product.category} {item.product.name}</Text>
         </View>
         <View style={style.containerPrice}>
           <Text style={style.txt}>{formatPrice(item.product.price)}</Text>

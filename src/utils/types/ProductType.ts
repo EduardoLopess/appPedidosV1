@@ -25,6 +25,7 @@ export interface Flavor {
 
 export interface Aditional {
   id: number;
+  nanoId: string;
   name: string;
   price: number;
   available: boolean;
